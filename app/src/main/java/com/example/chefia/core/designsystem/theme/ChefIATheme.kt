@@ -8,10 +8,20 @@ import androidx.compose.runtime.ReadOnlyComposable
 
 private val ColorScheme = lightColorScheme(
     primary = ChefIAColors.Primary,
+    onPrimary = ChefIAColors.OnPrimary,
+    primaryContainer = ChefIAColors.PrimaryContainer,
+
     secondary = ChefIAColors.Secondary,
+    onSecondary = ChefIAColors.OnSecondary,
+    secondaryContainer = ChefIAColors.SecondaryContainer,
+
     background = ChefIAColors.Background,
     surface = ChefIAColors.Surface,
-    error = ChefIAColors.Error
+
+    onBackground = ChefIAColors.TextPrimary,
+    onSurface = ChefIAColors.TextPrimary,
+
+    error = ChefIAColors.Error,
 )
 
 val MaterialTheme.spacing: ChefIASpacing

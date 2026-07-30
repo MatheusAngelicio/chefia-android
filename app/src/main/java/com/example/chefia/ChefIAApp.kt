@@ -1,4 +1,10 @@
 package com.example.chefia
 
-class ChefIAApp {
+import androidx.compose.runtime.Composable
+import com.example.chefia.feature.home.HomeScreen
+
+@Composable
+fun ChefIAApp() {
+
+    HomeScreen()
 }
