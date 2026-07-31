@@ -20,9 +20,18 @@ import com.example.chefia.feature.home.components.HomeActionCard
 import com.example.chefia.feature.home.components.HomeActionCardOrientation
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateToIngredients: () -> Unit,
+) {
     HomeContent(
-        onAction = {},
+        onAction = { action ->
+            when (action) {
+                HomeAction.CameraClicked -> Unit
+                HomeAction.TypeIngredientsClicked -> {
+                    onNavigateToIngredients()
+                }
+            }
+        },
     )
 }
 
@@ -49,7 +58,7 @@ private fun HomeContent(
         )
 
         Text(
-            text = "Informe os ingredientes que você tem e a IA encontrará as melhores receitas.",
+            text = "Informe os ingredientes que você tem e a ChefIA encontrará as melhores receitas.",
             modifier = Modifier.padding(
                 top = spacing.md,
                 bottom = spacing.xxl,
