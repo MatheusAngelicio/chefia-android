@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.chefia.core.navigation.ChefIADestination
 import com.example.chefia.feature.home.HomeScreen
 import com.example.chefia.feature.ingredients.IngredientsScreen
+import com.example.chefia.feature.splash.SplashScreen
 
 @Composable
 fun ChefIAApp() {
@@ -14,8 +15,20 @@ fun ChefIAApp() {
 
     NavHost(
         navController = navController,
-        startDestination = ChefIADestination.Home,
+        startDestination = ChefIADestination.Splash,
     ) {
+        composable<ChefIADestination.Splash> {
+            SplashScreen(
+                onLoadingComplete = {
+                    navController.navigate(ChefIADestination.Home) {
+                        popUpTo(ChefIADestination.Splash) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
+        }
+
         composable<ChefIADestination.Home> {
             HomeScreen(
                 onNavigateToIngredients = {
