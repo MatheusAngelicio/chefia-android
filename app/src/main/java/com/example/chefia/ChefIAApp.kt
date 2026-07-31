@@ -38,7 +38,11 @@ fun ChefIAApp() {
         }
 
         composable<ChefIADestination.Ingredients> {
-            IngredientsScreen()
+            IngredientsScreen(
+                onBack = {
+                    navController.navigateUp()
+                },
+            )
         }
     }
 }
