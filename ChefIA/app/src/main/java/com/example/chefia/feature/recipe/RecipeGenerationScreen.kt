@@ -1,4 +1,4 @@
-package com.example.chefia.core.ui.components.loading
+package com.example.chefia.feature.recipe
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,23 +34,62 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
+import com.example.chefia.domain.model.Recipe
+import com.example.chefia.domain.model.RecipeDifficulty
+import com.example.chefia.feature.recipe.components.RecipeLoadingAnimation
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecipeLoadingScreen(
-    state: RecipeLoadingUiState = RecipeLoadingUiState(),
+    ingredients: List<String>,
+    viewModel: RecipeGenerationViewModel = koinViewModel(),
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(ingredients) {
+        viewModel.onAction(
+            RecipeGenerationAction.GenerateRecipes(
+                ingredients = ingredients,
+            ),
+        )
+    }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
-        RecipeLoadingContent(
-            state = state,
-            modifier = Modifier.padding(innerPadding),
-        )
+        when (val status = state.status) {
+            RecipeLoadingStatus.Loading -> {
+                RecipeLoadingContent(
+                    state = state,
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+
+            is RecipeLoadingStatus.Success -> {
+                RecipeGeneratedContent(
+                    recipes = status.recipes,
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+
+            is RecipeLoadingStatus.Error -> {
+                RecipeGenerationErrorContent(
+                    message = status.message,
+                    onRetry = {
+                        viewModel.onAction(
+                            RecipeGenerationAction.RetryClicked,
+                        )
+                    },
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+        }
     }
 }
-
 @Composable
 private fun RecipeLoadingContent(
     state: RecipeLoadingUiState,
@@ -177,6 +218,79 @@ private fun IngredientLoadingLabel(
     )
 }
 
+@Composable
+private fun RecipeGeneratedContent(
+    recipes: List<Recipe>,
+    modifier: Modifier = Modifier,
+) {
+    val spacing = MaterialTheme.spacing
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(spacing.xl),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = "Receitas prontas! 🍳",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary,
+            textAlign = TextAlign.Center,
+        )
+
+        recipes.forEach { recipe ->
+            Text(
+                text = "• ${recipe.name}",
+                modifier = Modifier.padding(top = spacing.md),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecipeGenerationErrorContent(
+    message: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val spacing = MaterialTheme.spacing
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(spacing.xl),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = "Não conseguimos gerar as receitas",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
+        )
+
+        Text(
+            text = message,
+            modifier = Modifier.padding(
+                top = spacing.md,
+                bottom = spacing.lg,
+            ),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+
+        ChefIAButton(
+            text = "Tentar novamente",
+            onClick = onRetry,
+        )
+    }
+}
+
 @Preview(
     showBackground = true,
     showSystemUi = true,
@@ -186,6 +300,44 @@ private fun RecipeLoadingContentPreview() {
     ChefIATheme {
         RecipeLoadingContent(
             state = RecipeLoadingUiState(),
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+)
+@Composable
+private fun RecipeSuccessContentPreview() {
+    ChefIATheme {
+        RecipeGeneratedContent(
+            recipes = listOf(
+                Recipe(
+                    id = "1",
+                    name = "Omelete de Queijo",
+                    description = "Um omelete rápido e fácil",
+                    preparationTimeMinutes = 10,
+                    servings = 1,
+                    difficulty = RecipeDifficulty.EASY,
+                    ingredients = emptyList(),
+                    preparationSteps = emptyList()
+                )
+            ),
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+)
+@Composable
+private fun RecipeErrorContentPreview() {
+    ChefIATheme {
+        RecipeGenerationErrorContent(
+            message = "Não foi possível conectar ao servidor. Verifique sua conexão.",
+            onRetry = {}
         )
     }
 }

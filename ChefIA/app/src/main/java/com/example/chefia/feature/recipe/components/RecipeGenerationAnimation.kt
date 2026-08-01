@@ -1,4 +1,4 @@
-package com.example.chefia.core.ui.components.loading
+package com.example.chefia.feature.recipe.components
 
 import androidx.annotation.RawRes
 import androidx.compose.runtime.Composable

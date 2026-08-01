@@ -30,7 +30,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun IngredientsScreen(
     onBack: () -> Unit,
-    onNavigateToRecipeLoading: () -> Unit,
+    onNavigateToRecipeLoading: (List<String>) -> Unit,
     viewModel: IngredientsViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,8 +47,9 @@ fun IngredientsScreen(
             onAction = { action ->
                 when (action) {
                     IngredientsAction.FindRecipesClicked -> {
-                        viewModel.onAction(action)
-                        onNavigateToRecipeLoading()
+                        onNavigateToRecipeLoading(
+                            state.ingredients,
+                        )
                     }
 
                     else -> {
