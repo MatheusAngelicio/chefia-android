@@ -19,18 +19,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chefia.core.designsystem.components.ChefIAProgressIndicator
 import com.example.chefia.core.designsystem.theme.ChefIADimensions
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.feature.splash.components.SplashBottomWave
 import com.example.chefia.feature.splash.components.SplashIllustration
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashScreen(
     onLoadingComplete: () -> Unit,
-    viewModel: SplashViewModel = viewModel(),
+    viewModel: SplashViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
