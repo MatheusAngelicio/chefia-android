@@ -3,6 +3,7 @@ package com.example.chefia.feature.recipe
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
+import com.example.chefia.feature.recipe.mapper.RecipeErrorMapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,7 @@ class RecipeGenerationViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        RecipeLoadingUiState(),
+        RecipeGenerationUiState(),
     )
 
     val uiState = _uiState.asStateFlow()
@@ -41,7 +42,7 @@ class RecipeGenerationViewModel(
             return
         }
 
-        if (_uiState.value.status is RecipeLoadingStatus.Success) {
+        if (_uiState.value.status is RecipeGenerationStatus.Success) {
             return
         }
 
@@ -53,7 +54,7 @@ class RecipeGenerationViewModel(
             }.onSuccess { recipes ->
                 _uiState.update { currentState ->
                     currentState.copy(
-                        status = RecipeLoadingStatus.Success(
+                        status = RecipeGenerationStatus.Success(
                             recipes = recipes,
                         ),
                     )
@@ -61,9 +62,8 @@ class RecipeGenerationViewModel(
             }.onFailure { error ->
                 _uiState.update { currentState ->
                     currentState.copy(
-                        status = RecipeLoadingStatus.Error(
-                            message = error.message
-                                ?: "Não foi possível gerar as receitas.",
+                        status = RecipeGenerationStatus.Error(
+                            message = RecipeErrorMapper.map(error),
                         ),
                     )
                 }
@@ -74,7 +74,7 @@ class RecipeGenerationViewModel(
     private fun retry() {
         _uiState.update { currentState ->
             currentState.copy(
-                status = RecipeLoadingStatus.Loading,
+                status = RecipeGenerationStatus.Loading,
             )
         }
 
@@ -90,7 +90,7 @@ class RecipeGenerationViewModel(
         _uiState.update { currentState ->
             currentState.copy(
                 currentIngredient = "$firstIngredient...",
-                status = RecipeLoadingStatus.Loading,
+                status = RecipeGenerationStatus.Loading,
             )
         }
     }

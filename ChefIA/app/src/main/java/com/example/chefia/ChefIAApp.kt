@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.chefia.core.navigation.ChefIADestination
-import com.example.chefia.feature.recipe.RecipeLoadingScreen
 import com.example.chefia.feature.home.HomeScreen
 import com.example.chefia.feature.ingredients.IngredientsScreen
+import com.example.chefia.feature.recipe.RecipeGenerationScreen
 import com.example.chefia.feature.splash.SplashScreen
 
 @Composable
@@ -46,7 +46,7 @@ fun ChefIAApp() {
                 },
                 onNavigateToRecipeLoading = { ingredients ->
                     navController.navigate(
-                        ChefIADestination.RecipeLoading(
+                        ChefIADestination.RecipeGeneration(
                             ingredients = ingredients,
                         ),
                     )
@@ -54,13 +54,13 @@ fun ChefIAApp() {
             )
         }
 
-        composable<ChefIADestination.RecipeLoading> { backStackEntry ->
+        composable<ChefIADestination.RecipeGeneration> { backStackEntry ->
             val destination =
                 backStackEntry.toRoute<
-                        ChefIADestination.RecipeLoading
+                        ChefIADestination.RecipeGeneration
                         >()
 
-            RecipeLoadingScreen(
+            RecipeGenerationScreen(
                 ingredients = destination.ingredients,
             )
         }

@@ -1,22 +1,23 @@
 package com.example.chefia.feature.recipe
 
+import com.example.chefia.core.common.UiText
 import com.example.chefia.domain.model.Recipe
 
-data class RecipeLoadingUiState(
+data class RecipeGenerationUiState(
     val currentIngredient: String = "Preparando...",
-    val status: RecipeLoadingStatus =
-        RecipeLoadingStatus.Loading,
+    val status: RecipeGenerationStatus =
+        RecipeGenerationStatus.Loading,
 )
 
-sealed interface RecipeLoadingStatus {
+sealed interface RecipeGenerationStatus {
 
-    data object Loading : RecipeLoadingStatus
+    data object Loading : RecipeGenerationStatus
 
     data class Success(
         val recipes: List<Recipe>,
-    ) : RecipeLoadingStatus
+    ) : RecipeGenerationStatus
 
     data class Error(
-        val message: String,
-    ) : RecipeLoadingStatus
+        val message: UiText,
+    ) : RecipeGenerationStatus
 }

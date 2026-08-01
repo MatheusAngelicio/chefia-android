@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.chefia.core.common.UiText
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
@@ -44,7 +45,7 @@ import com.example.chefia.feature.recipe.components.RecipeLoadingAnimation
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RecipeLoadingScreen(
+fun RecipeGenerationScreen(
     ingredients: List<String>,
     viewModel: RecipeGenerationViewModel = koinViewModel(),
 ) {
@@ -62,21 +63,21 @@ fun RecipeLoadingScreen(
         containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         when (val status = state.status) {
-            RecipeLoadingStatus.Loading -> {
+            RecipeGenerationStatus.Loading -> {
                 RecipeLoadingContent(
                     state = state,
                     modifier = Modifier.padding(innerPadding),
                 )
             }
 
-            is RecipeLoadingStatus.Success -> {
+            is RecipeGenerationStatus.Success -> {
                 RecipeGeneratedContent(
                     recipes = status.recipes,
                     modifier = Modifier.padding(innerPadding),
                 )
             }
 
-            is RecipeLoadingStatus.Error -> {
+            is RecipeGenerationStatus.Error -> {
                 RecipeGenerationErrorContent(
                     message = status.message,
                     onRetry = {
@@ -90,9 +91,10 @@ fun RecipeLoadingScreen(
         }
     }
 }
+
 @Composable
 private fun RecipeLoadingContent(
-    state: RecipeLoadingUiState,
+    state: RecipeGenerationUiState,
     modifier: Modifier = Modifier,
 ) {
     val spacing = MaterialTheme.spacing
@@ -253,7 +255,7 @@ private fun RecipeGeneratedContent(
 
 @Composable
 private fun RecipeGenerationErrorContent(
-    message: String,
+    message: UiText,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -274,7 +276,7 @@ private fun RecipeGenerationErrorContent(
         )
 
         Text(
-            text = message,
+            text = message.asString(),
             modifier = Modifier.padding(
                 top = spacing.md,
                 bottom = spacing.lg,
@@ -299,7 +301,7 @@ private fun RecipeGenerationErrorContent(
 private fun RecipeLoadingContentPreview() {
     ChefIATheme {
         RecipeLoadingContent(
-            state = RecipeLoadingUiState(),
+            state = RecipeGenerationUiState(),
         )
     }
 }
@@ -336,7 +338,7 @@ private fun RecipeSuccessContentPreview() {
 private fun RecipeErrorContentPreview() {
     ChefIATheme {
         RecipeGenerationErrorContent(
-            message = "Não foi possível conectar ao servidor. Verifique sua conexão.",
+            message = UiText.DynamicString("Não foi possível conectar ao servidor. Verifique sua conexão."),
             onRetry = {}
         )
     }
