@@ -12,4 +12,7 @@ sealed interface ChefIADestination {
 
     @Serializable
     data object Ingredients : ChefIADestination
+
+    @Serializable
+    data object RecipeLoading : ChefIADestination
 }

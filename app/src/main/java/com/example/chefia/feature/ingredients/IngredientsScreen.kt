@@ -38,6 +38,7 @@ import com.example.chefia.feature.ingredients.components.IngredientsTopBar
 @Composable
 fun IngredientsScreen(
     onBack: () -> Unit,
+    onNavigateToRecipeLoading: () -> Unit,
     viewModel: IngredientsViewModel = viewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,7 +52,18 @@ fun IngredientsScreen(
     ) { innerPadding ->
         IngredientsContent(
             state = state,
-            onAction = viewModel::onAction,
+            onAction = { action ->
+                when (action) {
+                    IngredientsAction.FindRecipesClicked -> {
+                        viewModel.onAction(action)
+                        onNavigateToRecipeLoading()
+                    }
+
+                    else -> {
+                        viewModel.onAction(action)
+                    }
+                }
+            },
             modifier = Modifier.padding(innerPadding),
         )
     }
