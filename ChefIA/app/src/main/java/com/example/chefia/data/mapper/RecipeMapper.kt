@@ -16,6 +16,7 @@ fun GenerateRecipesResponseDto.toDomain(): List<Recipe> {
             preparationTimeMinutes =
                 recipeDto.preparationTimeMinutes,
             servings = recipeDto.servings,
+            caloriesPerServingKcal = recipeDto.caloriesPerServingKcal,
             difficulty =
                 recipeDto.difficulty.toDomainDifficulty(),
             ingredients = recipeDto.ingredients.map { ingredientDto ->

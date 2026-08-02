@@ -158,6 +158,7 @@ private fun HomeFavoriteCardPreview() {
                 description = "Uma panqueca saudável.",
                 preparationTimeMinutes = 15,
                 servings = 1,
+                caloriesPerServingKcal = 300,
                 difficulty = RecipeDifficulty.EASY,
                 ingredients = emptyList(),
                 preparationSteps = emptyList(),

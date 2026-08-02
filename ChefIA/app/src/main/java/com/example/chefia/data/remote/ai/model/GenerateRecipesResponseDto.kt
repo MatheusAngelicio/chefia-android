@@ -13,6 +13,7 @@ data class RecipeDto(
     val description: String,
     val preparationTimeMinutes: Int,
     val servings: Int,
+    val caloriesPerServingKcal: Int,
     val difficulty: String,
     val ingredients: List<RecipeIngredientDto>,
     val preparationSteps: List<String>,

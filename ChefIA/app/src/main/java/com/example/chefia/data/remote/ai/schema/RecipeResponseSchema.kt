@@ -61,6 +61,10 @@ object RecipeResponseSchema {
                     description = "Modo de preparo ordenado.",
                     minItems = 1,
                 ),
+                "caloriesPerServingKcal" to JsonSchema.integer(
+                    description = "Estimativa de calorias em uma única porção da receita.",
+                    minimum = 1.0,
+                ),
             ),
             clazz = RecipeDto::class,
             description = "Receita completa criada com os ingredientes disponíveis.",

@@ -9,6 +9,7 @@ data class Recipe(
     val description: String,
     val preparationTimeMinutes: Int,
     val servings: Int,
+    val caloriesPerServingKcal: Int,
     val difficulty: RecipeDifficulty,
     val ingredients: List<RecipeIngredient>,
     val preparationSteps: List<String>,
@@ -35,11 +36,20 @@ data class Recipe(
         }
 
     val difficultyToDisplayName: String
-        get() {
-            return when (difficulty) {
-                RecipeDifficulty.EASY -> "Fácil"
-                RecipeDifficulty.MEDIUM -> "Média"
-                RecipeDifficulty.HARD -> "Difícil"
-            }
+        get() = when (difficulty) {
+            RecipeDifficulty.EASY -> "Fácil"
+            RecipeDifficulty.MEDIUM -> "Média"
+            RecipeDifficulty.HARD -> "Difícil"
         }
+
+    val caloriesPerServingDisplay: String
+        get() = "$caloriesPerServingKcal kcal/porção"
+
+    val servingsToDisplay: String
+        get() = if (servings == 1) {
+            "1 porção"
+        } else {
+            "$servings porções"
+        }
+
 }

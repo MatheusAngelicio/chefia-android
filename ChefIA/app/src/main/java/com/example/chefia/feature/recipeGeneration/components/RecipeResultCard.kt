@@ -17,6 +17,8 @@ import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.Groups
+import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -189,32 +191,67 @@ private fun RecipeMetadata(
 ) {
     val spacing = MaterialTheme.spacing
 
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(spacing.md),
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(spacing.sm),
     ) {
-        RecipeMetadataItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Rounded.AccessTime,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                )
-            },
-            text = "${recipe.preparationTimeMinutes} min",
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(spacing.md),
+        ) {
+            RecipeMetadataItem(
+                modifier = Modifier.weight(1f),
+                icon = {
+                    Icon(
+                        imageVector = Icons.Rounded.AccessTime,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                },
+                text = "${recipe.preparationTimeMinutes} min",
+            )
 
-        RecipeMetadataItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Rounded.Restaurant,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                )
-            },
-            text = recipe.difficultyToDisplayName,
-        )
+            RecipeMetadataItem(
+                modifier = Modifier.weight(1f),
+                icon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Restaurant,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                },
+                text = recipe.difficultyToDisplayName,
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(spacing.md),
+        ) {
+            RecipeMetadataItem(
+                modifier = Modifier.weight(1f),
+                icon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Groups,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                },
+                text = recipe.servingsToDisplay,
+            )
+
+            RecipeMetadataItem(
+                modifier = Modifier.weight(1f),
+                icon = {
+                    Icon(
+                        imageVector = Icons.Rounded.LocalFireDepartment,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                },
+                text = recipe.caloriesPerServingDisplay,
+            )
+        }
     }
 }
 
@@ -222,8 +259,10 @@ private fun RecipeMetadata(
 private fun RecipeMetadataItem(
     icon: @Composable () -> Unit,
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(
             MaterialTheme.spacing.xs,
@@ -235,6 +274,7 @@ private fun RecipeMetadataItem(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
         )
     }
 }
@@ -333,6 +373,7 @@ private fun RecipeResultCardPreview() {
                     ),
                 ),
                 preparationSteps = emptyList(),
+                caloriesPerServingKcal = 300,
             ),
             isFavorite = false,
             onFavoriteClicked = {},

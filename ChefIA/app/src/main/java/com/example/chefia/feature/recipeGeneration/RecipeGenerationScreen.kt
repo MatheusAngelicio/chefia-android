@@ -389,6 +389,7 @@ private fun RecipeSuccessContentPreview() {
                     description = "Um omelete rápido e fácil",
                     preparationTimeMinutes = 10,
                     servings = 1,
+                    caloriesPerServingKcal = 200,
                     difficulty = RecipeDifficulty.EASY,
                     ingredients = emptyList(),
                     preparationSteps = emptyList()
