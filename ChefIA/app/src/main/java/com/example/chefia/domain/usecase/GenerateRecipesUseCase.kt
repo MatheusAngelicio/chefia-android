@@ -11,6 +11,7 @@ class GenerateRecipesUseCase(
 
     operator fun invoke(
         ingredients: List<String>,
+        servings: Int = 1,
         isFitness: Boolean = false,
         isBudget: Boolean = false,
     ): Flow<List<Recipe>> {
@@ -25,8 +26,13 @@ class GenerateRecipesUseCase(
             "Adicione pelo menos um ingrediente."
         }
 
+        require(servings > 0) {
+            "A quantidade de porções deve ser maior que zero."
+        }
+
         return repository.generateRecipes(
             ingredients = normalizedIngredients,
+            servings = servings,
             isFitness = isFitness,
             isBudget = isBudget,
         )

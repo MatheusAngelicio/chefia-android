@@ -31,6 +31,7 @@ class RecipeGenerationViewModel(
     private var generationJob: Job? = null
 
     private var ingredients: List<String> = emptyList()
+    private var servings: Int = 1
     private var isFitness: Boolean = false
     private var isBudget: Boolean = false
 
@@ -46,6 +47,7 @@ class RecipeGenerationViewModel(
         when (action) {
             is RecipeGenerationAction.GenerateRecipes -> {
                 ingredients = action.ingredients
+                servings = action.servings
                 isFitness = action.isFitness
                 isBudget = action.isBudget
                 generateRecipes()
@@ -77,6 +79,7 @@ class RecipeGenerationViewModel(
 
             generateRecipesUseCase(
                 ingredients = ingredients,
+                servings = servings,
                 isFitness = isFitness,
                 isBudget = isBudget,
             )

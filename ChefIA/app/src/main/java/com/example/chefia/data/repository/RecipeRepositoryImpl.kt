@@ -20,31 +20,38 @@ class RecipeRepositoryImpl(
 
     override fun generateRecipes(
         ingredients: List<String>,
+        servings: Int,
         isFitness: Boolean,
         isBudget: Boolean,
     ): Flow<List<Recipe>> = flow {
         val recipes = aiDataSource
             .generateRecipes(
                 ingredients = ingredients,
+                servings = servings,
                 isFitness = isFitness,
                 isBudget = isBudget,
             )
             .toDomain()
 
-        // Emitir receitas sem as imagens primeiro para exibir na UI rapidamente
+        // Emite as receitas sem imagens primeiro para exibir na UI rapidamente.
         emit(recipes)
 
-        // Buscar imagens em paralelo
+        // Busca as imagens em paralelo.
         val recipesWithImages = coroutineScope {
             recipes.map { recipe ->
                 async {
-                    val imageUrl = imageDataSource.searchImageUrl(recipe.name)
-                    recipe.copy(imageUrl = imageUrl)
+                    val imageUrl = imageDataSource.searchImageUrl(
+                        query = recipe.name,
+                    )
+
+                    recipe.copy(
+                        imageUrl = imageUrl,
+                    )
                 }
             }.awaitAll()
         }
 
-        // Emitir novamente com as URLs das imagens preenchidas
+        // Emite novamente com as URLs das imagens preenchidas.
         emit(recipesWithImages)
     }
 

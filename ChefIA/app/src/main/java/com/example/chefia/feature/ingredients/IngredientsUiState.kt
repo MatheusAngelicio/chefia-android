@@ -6,6 +6,7 @@ data class IngredientsUiState(
     val suggestions: List<IngredientSuggestion> = defaultSuggestions,
     val isFitness: Boolean = false,
     val isBudget: Boolean = false,
+    val servings: Int = 1,
 ) {
     val canFindRecipes: Boolean
         get() = ingredients.isNotEmpty()

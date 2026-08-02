@@ -6,6 +6,7 @@ sealed interface RecipeGenerationAction {
 
     data class GenerateRecipes(
         val ingredients: List<String>,
+        val servings: Int,
         val isFitness: Boolean = false,
         val isBudget: Boolean = false,
     ) : RecipeGenerationAction

@@ -24,5 +24,9 @@ sealed interface IngredientsAction {
         val isChecked: Boolean,
     ) : IngredientsAction
 
+    data class ServingsChanged(
+        val servings: Int,
+    ) : IngredientsAction
+
     data object FindRecipesClicked : IngredientsAction
 }

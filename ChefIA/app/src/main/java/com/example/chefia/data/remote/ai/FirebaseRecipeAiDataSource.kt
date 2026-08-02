@@ -13,11 +13,13 @@ class FirebaseRecipeAiDataSource(
 
     override suspend fun generateRecipes(
         ingredients: List<String>,
+        servings: Int,
         isFitness: Boolean,
         isBudget: Boolean,
     ): GenerateRecipesResponseDto {
         val prompt = buildPrompt(
             ingredients = ingredients,
+            servings = servings,
             isFitness = isFitness,
             isBudget = isBudget,
         )
@@ -34,17 +36,26 @@ class FirebaseRecipeAiDataSource(
                 "A IA não retornou nenhuma receita."
             }
 
-            Log.d(TAG, "Resposta da IA recebida com sucesso: $result")
+            Log.d(
+                TAG,
+                "Resposta da IA recebida com sucesso: $result",
+            )
 
             result
-        } catch (e: Exception) {
-            Log.e(TAG, "Erro na comunicação com o Firebase AI", e)
-            throw e
+        } catch (exception: Exception) {
+            Log.e(
+                TAG,
+                "Erro na comunicação com o Firebase AI",
+                exception,
+            )
+
+            throw exception
         }
     }
 
     private fun buildPrompt(
         ingredients: List<String>,
+        servings: Int,
         isFitness: Boolean,
         isBudget: Boolean,
     ): String {
@@ -53,29 +64,48 @@ class FirebaseRecipeAiDataSource(
         )
 
         val fitnessInstruction = if (isFitness) {
-            "- Gere receitas saudáveis, nutritivas e com baixo teor calórico (fitness)."
-        } else ""
+            """
+            - Gere receitas saudáveis, nutritivas e com menor teor calórico.
+            - Priorize métodos de preparo como assar, grelhar ou cozinhar.
+            """.trimIndent()
+        } else {
+            ""
+        }
 
         val budgetInstruction = if (isBudget) {
-            "- Priorize receitas econômicas, utilizando ingredientes simples e acessíveis (baratas)."
-        } else ""
+            """
+            - Priorize receitas econômicas.
+            - Utilize ingredientes simples, acessíveis e fáceis de encontrar.
+            """.trimIndent()
+        } else {
+            ""
+        }
 
         return """
             Ingredientes disponíveis:
             $formattedIngredients
 
+            Quantidade de porções:
+            $servings
+
             Gere exatamente 3 receitas diferentes e viáveis.
 
             Regras:
             - Responda sempre em português do Brasil.
+            - Todas as receitas devem render exatamente $servings ${if (servings == 1) "porção" else "porções"}.
+            - Ajuste as quantidades dos ingredientes para a quantidade de porções solicitada.
             - Priorize os ingredientes informados pelo usuário.
             $fitnessInstruction
             $budgetInstruction
             - Você pode incluir ingredientes básicos adicionais, como sal, água, óleo e temperos.
-            - Marque isAvailable como true somente quando o ingrediente estiver na lista informada.
-            - Use instruções simples e seguras.
-            - Não invente informações nutricionais.
+            - Marque isAvailable como true somente quando o ingrediente estiver na lista informada pelo usuário.
+            - Informe uma estimativa coerente de calorias por porção no campo caloriesPerServingKcal.
+            - O campo caloriesPerServingKcal deve conter somente um número inteiro.
+            - Considere o tamanho das porções e as quantidades informadas ao estimar as calorias.
+            - Use instruções simples, claras e seguras.
+            - Não apresente as calorias como uma informação nutricional exata.
             - Não inclua explicações fora da estrutura solicitada.
         """.trimIndent()
     }
+
 }

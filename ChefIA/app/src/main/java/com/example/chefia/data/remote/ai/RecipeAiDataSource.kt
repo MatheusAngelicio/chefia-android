@@ -6,6 +6,7 @@ interface RecipeAiDataSource {
 
     suspend fun generateRecipes(
         ingredients: List<String>,
+        servings: Int,
         isFitness: Boolean,
         isBudget: Boolean,
     ): GenerateRecipesResponseDto

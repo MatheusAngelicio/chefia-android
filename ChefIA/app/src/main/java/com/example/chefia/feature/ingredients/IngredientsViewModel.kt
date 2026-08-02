@@ -36,6 +36,14 @@ class IngredientsViewModel : ViewModel() {
                 toggleBudget(action.isChecked)
             }
 
+            is IngredientsAction.ServingsChanged -> {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        servings = action.servings,
+                    )
+                }
+            }
+
             IngredientsAction.FindRecipesClicked -> Unit
         }
     }

@@ -50,10 +50,16 @@ fun ChefIAApp() {
                 onBack = {
                     navController.navigateUp()
                 },
-                onNavigateToRecipeGeneration = { ingredients, isFitness, isBudget ->
+                onNavigateToRecipeGeneration = {
+                        ingredients,
+                        servings,
+                        isFitness,
+                        isBudget,
+                    ->
                     navController.navigate(
                         ChefIADestination.RecipeGeneration(
                             ingredients = ingredients,
+                            servings = servings,
                             isFitness = isFitness,
                             isBudget = isBudget,
                         ),
@@ -64,12 +70,11 @@ fun ChefIAApp() {
 
         composable<ChefIADestination.RecipeGeneration> { backStackEntry ->
             val destination =
-                backStackEntry.toRoute<
-                        ChefIADestination.RecipeGeneration
-                        >()
+                backStackEntry.toRoute<ChefIADestination.RecipeGeneration>()
 
             RecipeGenerationScreen(
                 ingredients = destination.ingredients,
+                servings = destination.servings,
                 isFitness = destination.isFitness,
                 isBudget = destination.isBudget,
                 onBackClick = {

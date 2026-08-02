@@ -26,21 +26,25 @@ import com.example.chefia.feature.ingredients.components.IngredientsCart
 import com.example.chefia.feature.ingredients.components.IngredientsCountBadge
 import com.example.chefia.feature.ingredients.components.IngredientsPreferences
 import com.example.chefia.feature.ingredients.components.IngredientsTopBar
+import com.example.chefia.feature.ingredients.components.ServingsSelector
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun IngredientsScreen(
     onBack: () -> Unit,
-    onNavigateToRecipeGeneration: (List<String>, Boolean, Boolean) -> Unit,
+    onNavigateToRecipeGeneration: (
+        ingredients: List<String>,
+        servings: Int,
+        isFitness: Boolean,
+        isBudget: Boolean,
+    ) -> Unit,
     viewModel: IngredientsViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
-            IngredientsTopBar(
-                onBack = onBack,
-            )
+            IngredientsTopBar(onBack = onBack)
         },
     ) { innerPadding ->
         IngredientsContent(
@@ -50,21 +54,19 @@ fun IngredientsScreen(
                     IngredientsAction.FindRecipesClicked -> {
                         onNavigateToRecipeGeneration(
                             state.ingredients,
+                            state.servings,
                             state.isFitness,
                             state.isBudget,
                         )
                     }
 
-                    else -> {
-                        viewModel.onAction(action)
-                    }
+                    else -> viewModel.onAction(action)
                 }
             },
             modifier = Modifier.padding(innerPadding),
         )
     }
 }
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun IngredientsContent(
@@ -137,6 +139,17 @@ private fun IngredientsContent(
             }
         }
 
+        ServingsSelector(
+            servings = state.servings,
+            onServingsChange = { servings ->
+                onAction(
+                    IngredientsAction.ServingsChanged(
+                        servings = servings,
+                    ),
+                )
+            },
+            modifier = Modifier.padding(top = spacing.lg),
+        )
         IngredientsPreferences(
             isFitness = state.isFitness,
             isBudget = state.isBudget,
