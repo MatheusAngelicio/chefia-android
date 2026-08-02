@@ -1,8 +1,11 @@
 package com.example.chefia.data.remote.ai
 
+import android.util.Log
 import com.example.chefia.data.remote.ai.model.GenerateRecipesResponseDto
 import com.example.chefia.data.remote.ai.schema.RecipeResponseSchema
 import com.google.firebase.ai.GenerativeModel
+
+private const val TAG = "ChefIA_AI"
 
 class FirebaseRecipeAiDataSource(
     private val generativeModel: GenerativeModel,
@@ -15,13 +18,24 @@ class FirebaseRecipeAiDataSource(
             ingredients = ingredients,
         )
 
-        val response = generativeModel.generateObject(
-            jsonSchema = RecipeResponseSchema.value,
-            prompt = prompt,
-        )
+        Log.d(TAG, "Enviando prompt para o Firebase AI:\n$prompt")
 
-        return requireNotNull(response.getObject()) {
-            "A IA não retornou nenhuma receita."
+        return try {
+            val response = generativeModel.generateObject(
+                jsonSchema = RecipeResponseSchema.value,
+                prompt = prompt,
+            )
+
+            val result = requireNotNull(response.getObject()) {
+                "A IA não retornou nenhuma receita."
+            }
+
+            Log.d(TAG, "Resposta da IA recebida com sucesso: $result")
+
+            result
+        } catch (e: Exception) {
+            Log.e(TAG, "Erro na comunicação com o Firebase AI", e)
+            throw e
         }
     }
 
