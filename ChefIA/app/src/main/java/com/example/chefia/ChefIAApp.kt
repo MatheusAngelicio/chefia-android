@@ -100,7 +100,7 @@ fun ChefIAApp() {
                 recipe = destination.recipe,
                 onBackClick = {
                     navController.navigateUp()
-                }
+                },
             )
         }
     }
