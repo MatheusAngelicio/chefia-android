@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -42,7 +44,9 @@ import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.model.RecipeDifficulty
 import com.example.chefia.feature.recipe.components.RecipeLoadingAnimation
+import com.example.chefia.feature.recipe.components.RecipeResultCard
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.foundation.lazy.items
 
 @Composable
 fun RecipeGenerationScreen(
@@ -71,8 +75,10 @@ fun RecipeGenerationScreen(
             }
 
             is RecipeGenerationStatus.Success -> {
-                RecipeGeneratedContent(
+                RecipeResultsContent(
                     recipes = status.recipes,
+                    favoriteRecipeIds = state.favoriteRecipeIds,
+                    onAction = viewModel::onAction,
                     modifier = Modifier.padding(innerPadding),
                 )
             }
@@ -221,33 +227,58 @@ private fun IngredientLoadingLabel(
 }
 
 @Composable
-private fun RecipeGeneratedContent(
+private fun RecipeResultsContent(
     recipes: List<Recipe>,
+    favoriteRecipeIds: Set<String>,
+    onAction: (RecipeGenerationAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val spacing = MaterialTheme.spacing
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(spacing.xl),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            horizontal = spacing.lg,
+            vertical = spacing.lg,
+        ),
+        verticalArrangement = Arrangement.spacedBy(spacing.lg),
     ) {
-        Text(
-            text = "Receitas prontas! 🍳",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center,
-        )
-
-        recipes.forEach { recipe ->
+        item {
             Text(
-                text = "• ${recipe.name}",
-                modifier = Modifier.padding(top = spacing.md),
-                style = MaterialTheme.typography.bodyLarge,
+                text = "Receitas encontradas",
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
+            )
+
+            Text(
+                text = "Sugerimos pratos deliciosos baseados nos ingredientes que você tem disponível.",
+                modifier = Modifier.padding(top = spacing.xs),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+
+        items(
+            items = recipes,
+            key = { recipe -> recipe.id },
+        ) { recipe ->
+            RecipeResultCard(
+                recipe = recipe,
+                isFavorite = recipe.id in favoriteRecipeIds,
+                onFavoriteClicked = {
+                    onAction(
+                        RecipeGenerationAction.FavoriteClicked(
+                            recipeId = recipe.id,
+                        ),
+                    )
+                },
+                onRecipeClicked = {
+                    onAction(
+                        RecipeGenerationAction.RecipeClicked(
+                            recipeId = recipe.id,
+                        ),
+                    )
+                },
             )
         }
     }
@@ -313,7 +344,7 @@ private fun RecipeLoadingContentPreview() {
 @Composable
 private fun RecipeSuccessContentPreview() {
     ChefIATheme {
-        RecipeGeneratedContent(
+        RecipeResultsContent(
             recipes = listOf(
                 Recipe(
                     id = "1",
@@ -326,6 +357,8 @@ private fun RecipeSuccessContentPreview() {
                     preparationSteps = emptyList()
                 )
             ),
+            favoriteRecipeIds = emptySet(),
+            onAction = {},
         )
     }
 }

@@ -7,4 +7,12 @@ sealed interface RecipeGenerationAction {
     ) : RecipeGenerationAction
 
     data object RetryClicked : RecipeGenerationAction
+
+    data class FavoriteClicked(
+        val recipeId: String,
+    ) : RecipeGenerationAction
+
+    data class RecipeClicked(
+        val recipeId: String,
+    ) : RecipeGenerationAction
 }

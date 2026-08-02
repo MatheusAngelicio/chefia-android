@@ -23,7 +23,7 @@ object ChefIADimensions {
     val SplashDecorationIconSize = 30.dp
 
     val SplashProgressWidthFraction = 0.62f
-    val SplashProgressHeight = 5.dp
+    val ProgressIndicatorHeight = 5.dp
 
     val SplashWaveHeight = 90.dp
 }

@@ -5,6 +5,7 @@ import com.example.chefia.domain.model.Recipe
 
 data class RecipeGenerationUiState(
     val currentIngredient: String = "Preparando...",
+    val favoriteRecipeIds: Set<String> = emptySet(),
     val status: RecipeGenerationStatus =
         RecipeGenerationStatus.Loading,
 )

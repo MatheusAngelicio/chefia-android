@@ -34,6 +34,12 @@ class RecipeGenerationViewModel(
             RecipeGenerationAction.RetryClicked -> {
                 retry()
             }
+
+            is RecipeGenerationAction.FavoriteClicked -> {
+                toggleFavorite(action.recipeId)
+            }
+
+            is RecipeGenerationAction.RecipeClicked -> Unit
         }
     }
 
@@ -54,6 +60,7 @@ class RecipeGenerationViewModel(
             }.onSuccess { recipes ->
                 _uiState.update { currentState ->
                     currentState.copy(
+                        favoriteRecipeIds = emptySet(),
                         status = RecipeGenerationStatus.Success(
                             recipes = recipes,
                         ),
@@ -91,6 +98,23 @@ class RecipeGenerationViewModel(
             currentState.copy(
                 currentIngredient = "$firstIngredient...",
                 status = RecipeGenerationStatus.Loading,
+            )
+        }
+    }
+
+    private fun toggleFavorite(recipeId: String) {
+        _uiState.update { currentState ->
+            val updatedFavorites =
+                currentState.favoriteRecipeIds.toMutableSet()
+
+            if (recipeId in updatedFavorites) {
+                updatedFavorites.remove(recipeId)
+            } else {
+                updatedFavorites.add(recipeId)
+            }
+
+            currentState.copy(
+                favoriteRecipeIds = updatedFavorites,
             )
         }
     }
