@@ -268,7 +268,7 @@ private fun RecipeResultsContent(
                 onFavoriteClicked = {
                     onAction(
                         RecipeGenerationAction.FavoriteClicked(
-                            recipeId = recipe.id,
+                            recipe = recipe,
                         ),
                     )
                 },

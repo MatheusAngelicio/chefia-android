@@ -1,5 +1,7 @@
 package com.example.chefia.feature.recipe
 
+import com.example.chefia.domain.model.Recipe
+
 sealed interface RecipeGenerationAction {
 
     data class GenerateRecipes(
@@ -9,7 +11,7 @@ sealed interface RecipeGenerationAction {
     data object RetryClicked : RecipeGenerationAction
 
     data class FavoriteClicked(
-        val recipeId: String,
+        val recipe: Recipe,
     ) : RecipeGenerationAction
 
     data class RecipeClicked(

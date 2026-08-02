@@ -5,6 +5,8 @@ import com.example.chefia.data.remote.ai.RecipeAiDataSource
 import com.example.chefia.data.repository.RecipeRepositoryImpl
 import com.example.chefia.domain.repository.RecipeRepository
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
+import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipeIdsUseCase
+import com.example.chefia.domain.usecase.favorites.ToggleFavoriteRecipeUseCase
 import com.example.chefia.feature.recipe.RecipeGenerationViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.ai.GenerativeModel
@@ -47,11 +49,24 @@ val recipeModule = module {
     single<RecipeRepository> {
         RecipeRepositoryImpl(
             aiDataSource = get(),
+            localDataSource = get(),
         )
     }
 
     factory {
         GenerateRecipesUseCase(
+            repository = get(),
+        )
+    }
+
+    factory {
+        ObserveFavoriteRecipeIdsUseCase(
+            repository = get(),
+        )
+    }
+
+    factory {
+        ToggleFavoriteRecipeUseCase(
             repository = get(),
         )
     }
