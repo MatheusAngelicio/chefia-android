@@ -13,7 +13,7 @@ val databaseModule = module {
             androidContext(),
             ChefIADatabase::class.java,
             "chefia.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     single { get<ChefIADatabase>().recipeDao }

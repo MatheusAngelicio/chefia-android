@@ -16,6 +16,7 @@ data class RecipeEntity(
     val difficulty: RecipeDifficulty,
     val ingredients: List<RecipeIngredient>,
     val preparationSteps: List<String>,
+    val favoritedAt: Long = System.currentTimeMillis(),
 )
 
 fun RecipeEntity.toDomain() = Recipe(
@@ -38,4 +39,5 @@ fun Recipe.toEntity() = RecipeEntity(
     difficulty = difficulty,
     ingredients = ingredients,
     preparationSteps = preparationSteps,
+    favoritedAt = System.currentTimeMillis(),
 )

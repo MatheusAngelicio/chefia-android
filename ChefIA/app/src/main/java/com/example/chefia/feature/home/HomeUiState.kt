@@ -1,7 +1,8 @@
 package com.example.chefia.feature.home
 
+import com.example.chefia.domain.model.Recipe
+
 data class HomeUiState(
-    val ingredients: List<String> = emptyList(),
-    val currentIngredient: String = "",
-    val isLoading: Boolean = false
+    val favoriteRecipes: List<Recipe> = emptyList(),
+    val isLoading: Boolean = false,
 )

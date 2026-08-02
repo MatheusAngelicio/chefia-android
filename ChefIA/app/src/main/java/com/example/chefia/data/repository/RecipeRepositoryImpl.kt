@@ -24,6 +24,10 @@ class RecipeRepositoryImpl(
         return localDataSource.getFavoriteRecipeIds()
     }
 
+    override fun getFavoriteRecipes(): Flow<List<Recipe>> {
+        return localDataSource.getFavoriteRecipes()
+    }
+
     override suspend fun toggleFavorite(recipe: Recipe) {
         localDataSource.toggleFavorite(recipe)
     }

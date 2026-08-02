@@ -1,0 +1,16 @@
+- `[x]` Configurar Room e KSP no `libs.versions.toml` e `build.gradle.kts`
+- `[x]` Criar entidade `RecipeEntity` e Conversores
+- `[x]` Criar `RecipeDao` e `ChefIADatabase`
+- `[x]` Criar `RecipeLocalDataSource` (Interface e Implementação)
+- `[x]` Atualizar `RecipeRepository` e `RecipeRepositoryImpl`
+- `[x]` Criar UseCases: `ObserveFavoriteRecipeIdsUseCase` e `ToggleFavoriteRecipeUseCase`
+- `[x]` Criar `DatabaseModule.kt` e registrar no App
+- `[x]` Atualizar `RecipeGenerationAction` e `RecipeGenerationViewModel`
+- `[x]` Atualizar `RecipeGenerationScreen` para passar a receita completa no clique de favorito
+- `[x]` Verificar a persistência e reatividade
+- `[x]` Implementar `getFavoriteRecipes()` no Repositório
+- `[x]` Criar `ObserveFavoriteRecipesUseCase`
+- `[x]` Atualizar `HomeUiState` e `HomeAction`
+- `[x]` Atualizar `HomeViewModel` para observar receitas favoritas
+- `[x]` Criar componente `HomeFavoriteCard`
+- `[x]` Atualizar `HomeScreen` com a seção de favoritos (LazyRow + "Ver tudo")

@@ -11,5 +11,7 @@ interface RecipeRepository {
 
     fun getFavoriteRecipeIds(): Flow<Set<String>>
 
+    fun getFavoriteRecipes(): Flow<List<Recipe>>
+
     suspend fun toggleFavorite(recipe: Recipe)
 }

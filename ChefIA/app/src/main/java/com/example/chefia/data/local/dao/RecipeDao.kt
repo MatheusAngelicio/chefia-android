@@ -19,7 +19,7 @@ interface RecipeDao {
     @Query("SELECT id FROM recipes")
     fun getFavoriteIds(): Flow<List<String>>
 
-    @Query("SELECT * FROM recipes")
+    @Query("SELECT * FROM recipes ORDER BY favoritedAt DESC")
     fun getFavoriteRecipes(): Flow<List<RecipeEntity>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM recipes WHERE id = :id)")

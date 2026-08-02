@@ -6,6 +6,7 @@ import com.example.chefia.data.repository.RecipeRepositoryImpl
 import com.example.chefia.domain.repository.RecipeRepository
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipeIdsUseCase
+import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ToggleFavoriteRecipeUseCase
 import com.example.chefia.feature.recipe.RecipeGenerationViewModel
 import com.google.firebase.Firebase
@@ -61,6 +62,12 @@ val recipeModule = module {
 
     factory {
         ObserveFavoriteRecipeIdsUseCase(
+            repository = get(),
+        )
+    }
+
+    factory {
+        ObserveFavoriteRecipesUseCase(
             repository = get(),
         )
     }
