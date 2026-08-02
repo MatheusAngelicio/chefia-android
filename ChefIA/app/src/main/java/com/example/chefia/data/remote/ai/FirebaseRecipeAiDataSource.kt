@@ -13,9 +13,13 @@ class FirebaseRecipeAiDataSource(
 
     override suspend fun generateRecipes(
         ingredients: List<String>,
+        isFitness: Boolean,
+        isBudget: Boolean,
     ): GenerateRecipesResponseDto {
         val prompt = buildPrompt(
             ingredients = ingredients,
+            isFitness = isFitness,
+            isBudget = isBudget,
         )
 
         Log.d(TAG, "Enviando prompt para o Firebase AI:\n$prompt")
@@ -41,10 +45,20 @@ class FirebaseRecipeAiDataSource(
 
     private fun buildPrompt(
         ingredients: List<String>,
+        isFitness: Boolean,
+        isBudget: Boolean,
     ): String {
         val formattedIngredients = ingredients.joinToString(
             separator = ", ",
         )
+
+        val fitnessInstruction = if (isFitness) {
+            "- Gere receitas saudáveis, nutritivas e com baixo teor calórico (fitness)."
+        } else ""
+
+        val budgetInstruction = if (isBudget) {
+            "- Priorize receitas econômicas, utilizando ingredientes simples e acessíveis (baratas)."
+        } else ""
 
         return """
             Ingredientes disponíveis:
@@ -55,6 +69,8 @@ class FirebaseRecipeAiDataSource(
             Regras:
             - Responda sempre em português do Brasil.
             - Priorize os ingredientes informados pelo usuário.
+            $fitnessInstruction
+            $budgetInstruction
             - Você pode incluir ingredientes básicos adicionais, como sal, água, óleo e temperos.
             - Marque isAvailable como true somente quando o ingrediente estiver na lista informada.
             - Use instruções simples e seguras.

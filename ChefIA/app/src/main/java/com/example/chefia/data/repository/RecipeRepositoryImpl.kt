@@ -20,9 +20,15 @@ class RecipeRepositoryImpl(
 
     override fun generateRecipes(
         ingredients: List<String>,
+        isFitness: Boolean,
+        isBudget: Boolean,
     ): Flow<List<Recipe>> = flow {
         val recipes = aiDataSource
-            .generateRecipes(ingredients)
+            .generateRecipes(
+                ingredients = ingredients,
+                isFitness = isFitness,
+                isBudget = isBudget,
+            )
             .toDomain()
 
         // Emitir receitas sem as imagens primeiro para exibir na UI rapidamente

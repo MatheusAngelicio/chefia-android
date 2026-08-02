@@ -7,6 +7,8 @@ interface RecipeRepository {
 
     fun generateRecipes(
         ingredients: List<String>,
+        isFitness: Boolean,
+        isBudget: Boolean,
     ): Flow<List<Recipe>>
 
     fun getFavoriteRecipeIds(): Flow<Set<String>>

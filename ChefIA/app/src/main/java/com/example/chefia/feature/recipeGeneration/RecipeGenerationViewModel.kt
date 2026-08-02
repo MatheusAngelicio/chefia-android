@@ -31,6 +31,8 @@ class RecipeGenerationViewModel(
     private var generationJob: Job? = null
 
     private var ingredients: List<String> = emptyList()
+    private var isFitness: Boolean = false
+    private var isBudget: Boolean = false
 
     init {
         observeFavoriteRecipeIdsUseCase()
@@ -44,6 +46,8 @@ class RecipeGenerationViewModel(
         when (action) {
             is RecipeGenerationAction.GenerateRecipes -> {
                 ingredients = action.ingredients
+                isFitness = action.isFitness
+                isBudget = action.isBudget
                 generateRecipes()
             }
 
@@ -71,7 +75,11 @@ class RecipeGenerationViewModel(
         generationJob = viewModelScope.launch {
             updateLoadingState()
 
-            generateRecipesUseCase(ingredients)
+            generateRecipesUseCase(
+                ingredients = ingredients,
+                isFitness = isFitness,
+                isBudget = isBudget,
+            )
                 .onEach { recipes ->
                     _uiState.update { currentState ->
                         currentState.copy(

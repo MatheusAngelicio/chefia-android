@@ -24,13 +24,14 @@ import com.example.chefia.feature.ingredients.components.IngredientInput
 import com.example.chefia.feature.ingredients.components.IngredientSuggestionChip
 import com.example.chefia.feature.ingredients.components.IngredientsCart
 import com.example.chefia.feature.ingredients.components.IngredientsCountBadge
+import com.example.chefia.feature.ingredients.components.IngredientsPreferences
 import com.example.chefia.feature.ingredients.components.IngredientsTopBar
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun IngredientsScreen(
     onBack: () -> Unit,
-    onNavigateToRecipeLoading: (List<String>) -> Unit,
+    onNavigateToRecipeGeneration: (List<String>, Boolean, Boolean) -> Unit,
     viewModel: IngredientsViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,8 +48,10 @@ fun IngredientsScreen(
             onAction = { action ->
                 when (action) {
                     IngredientsAction.FindRecipesClicked -> {
-                        onNavigateToRecipeLoading(
+                        onNavigateToRecipeGeneration(
                             state.ingredients,
+                            state.isFitness,
+                            state.isBudget,
                         )
                     }
 
@@ -133,6 +136,18 @@ private fun IngredientsContent(
                 )
             }
         }
+
+        IngredientsPreferences(
+            isFitness = state.isFitness,
+            isBudget = state.isBudget,
+            onFitnessToggled = {
+                onAction(IngredientsAction.FitnessToggled(it))
+            },
+            onBudgetToggled = {
+                onAction(IngredientsAction.BudgetToggled(it))
+            },
+            modifier = Modifier.padding(top = spacing.lg),
+        )
 
         Row(
             modifier = Modifier

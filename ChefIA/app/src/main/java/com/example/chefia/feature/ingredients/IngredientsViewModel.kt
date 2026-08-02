@@ -28,6 +28,14 @@ class IngredientsViewModel : ViewModel() {
                 removeIngredient(action.ingredient)
             }
 
+            is IngredientsAction.FitnessToggled -> {
+                toggleFitness(action.isChecked)
+            }
+
+            is IngredientsAction.BudgetToggled -> {
+                toggleBudget(action.isChecked)
+            }
+
             IngredientsAction.FindRecipesClicked -> Unit
         }
     }
@@ -38,6 +46,14 @@ class IngredientsViewModel : ViewModel() {
                 currentIngredient = value,
             )
         }
+    }
+
+    private fun toggleFitness(isChecked: Boolean) {
+        _uiState.update { it.copy(isFitness = isChecked) }
+    }
+
+    private fun toggleBudget(isChecked: Boolean) {
+        _uiState.update { it.copy(isBudget = isChecked) }
     }
 
     private fun addCurrentIngredient() {

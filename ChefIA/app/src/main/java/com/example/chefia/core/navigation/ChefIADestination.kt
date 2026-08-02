@@ -17,6 +17,8 @@ sealed interface ChefIADestination {
     @Serializable
     data class RecipeGeneration(
         val ingredients: List<String>,
+        val isFitness: Boolean = false,
+        val isBudget: Boolean = false,
     ) : ChefIADestination
 
     @Serializable

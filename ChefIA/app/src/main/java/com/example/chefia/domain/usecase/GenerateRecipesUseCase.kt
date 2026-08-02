@@ -11,6 +11,8 @@ class GenerateRecipesUseCase(
 
     operator fun invoke(
         ingredients: List<String>,
+        isFitness: Boolean = false,
+        isBudget: Boolean = false,
     ): Flow<List<Recipe>> {
         val normalizedIngredients = ingredients
             .map(String::trim)
@@ -25,6 +27,8 @@ class GenerateRecipesUseCase(
 
         return repository.generateRecipes(
             ingredients = normalizedIngredients,
+            isFitness = isFitness,
+            isBudget = isBudget,
         )
     }
 }

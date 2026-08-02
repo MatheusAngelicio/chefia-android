@@ -50,10 +50,12 @@ fun ChefIAApp() {
                 onBack = {
                     navController.navigateUp()
                 },
-                onNavigateToRecipeLoading = { ingredients ->
+                onNavigateToRecipeGeneration = { ingredients, isFitness, isBudget ->
                     navController.navigate(
                         ChefIADestination.RecipeGeneration(
                             ingredients = ingredients,
+                            isFitness = isFitness,
+                            isBudget = isBudget,
                         ),
                     )
                 },
@@ -68,6 +70,8 @@ fun ChefIAApp() {
 
             RecipeGenerationScreen(
                 ingredients = destination.ingredients,
+                isFitness = destination.isFitness,
+                isBudget = destination.isBudget,
                 onBackClick = {
                     navController.navigateUp()
                 },
