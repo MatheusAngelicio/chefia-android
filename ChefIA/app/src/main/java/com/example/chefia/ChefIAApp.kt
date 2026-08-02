@@ -62,6 +62,9 @@ fun ChefIAApp() {
 
             RecipeGenerationScreen(
                 ingredients = destination.ingredients,
+                onBackClick = {
+                    navController.navigateUp()
+                }
             )
         }
     }

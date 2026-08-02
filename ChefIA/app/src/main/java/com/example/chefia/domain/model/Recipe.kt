@@ -9,6 +9,7 @@ data class Recipe(
     val difficulty: RecipeDifficulty,
     val ingredients: List<RecipeIngredient>,
     val preparationSteps: List<String>,
+    val imageUrl: String? = null,
 ) {
     val availableIngredientsCount: Int
         get() = ingredients.count { it.isAvailable }

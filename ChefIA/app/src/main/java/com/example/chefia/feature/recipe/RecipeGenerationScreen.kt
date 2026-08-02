@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,6 +44,7 @@ import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.model.RecipeDifficulty
+import com.example.chefia.core.designsystem.components.ChefIATopBar
 import com.example.chefia.feature.recipe.components.RecipeLoadingAnimation
 import com.example.chefia.feature.recipe.components.RecipeResultCard
 import org.koin.androidx.compose.koinViewModel
@@ -51,6 +53,7 @@ import androidx.compose.foundation.lazy.items
 @Composable
 fun RecipeGenerationScreen(
     ingredients: List<String>,
+    onBackClick: () -> Unit,
     viewModel: RecipeGenerationViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,6 +67,9 @@ fun RecipeGenerationScreen(
     }
 
     Scaffold(
+        topBar = {
+            ChefIATopBar(onBackClick = onBackClick)
+        },
         containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         when (val status = state.status) {
@@ -234,6 +240,7 @@ private fun RecipeResultsContent(
     modifier: Modifier = Modifier,
 ) {
     val spacing = MaterialTheme.spacing
+    val isLoadingImages = recipes.any { it.imageUrl == null }
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -244,18 +251,35 @@ private fun RecipeResultsContent(
         verticalArrangement = Arrangement.spacedBy(spacing.lg),
     ) {
         item {
-            Text(
-                text = "Receitas encontradas",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            Column {
+                Text(
+                    text = "Receitas encontradas",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
 
-            Text(
-                text = "Sugerimos pratos deliciosos baseados nos ingredientes que você tem disponível.",
-                modifier = Modifier.padding(top = spacing.xs),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+                Text(
+                    text = "Sugerimos pratos deliciosos baseados nos ingredientes que você tem disponível.",
+                    modifier = Modifier.padding(top = spacing.xs),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                if (isLoadingImages) {
+                    Spacer(modifier = Modifier.height(spacing.md))
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                    Text(
+                        text = "Buscando imagens das receitas...",
+                        modifier = Modifier.padding(top = spacing.xs),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         }
 
         items(

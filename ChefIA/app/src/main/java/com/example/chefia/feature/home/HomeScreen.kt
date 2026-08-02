@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.Edit
@@ -25,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
@@ -34,7 +35,7 @@ import com.example.chefia.domain.model.RecipeDifficulty
 import com.example.chefia.feature.home.components.HomeActionCard
 import com.example.chefia.feature.home.components.HomeActionCardOrientation
 import com.example.chefia.feature.home.components.HomeFavoriteCard
-import com.example.chefia.feature.home.components.HomeTopBar
+import com.example.chefia.core.designsystem.components.ChefIATopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -46,7 +47,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeTopBar()
+            ChefIATopBar()
         },
     ) { innerPadding ->
 
@@ -79,6 +80,7 @@ private fun HomeContent(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(
                 vertical = spacing.lg,
             ),
@@ -171,6 +173,8 @@ private fun HomeContent(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(spacing.sm))
+
         }
     }
  }

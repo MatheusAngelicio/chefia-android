@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
 
-    suspend fun generateRecipes(
+    fun generateRecipes(
         ingredients: List<String>,
-    ): List<Recipe>
+    ): Flow<List<Recipe>>
 
     fun getFavoriteRecipeIds(): Flow<Set<String>>
 

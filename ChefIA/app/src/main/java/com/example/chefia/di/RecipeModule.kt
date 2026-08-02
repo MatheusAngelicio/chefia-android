@@ -2,6 +2,8 @@ package com.example.chefia.di
 
 import com.example.chefia.data.remote.ai.FirebaseRecipeAiDataSource
 import com.example.chefia.data.remote.ai.RecipeAiDataSource
+import com.example.chefia.data.remote.image.RecipeImageDataSource
+import com.example.chefia.data.remote.image.UnsplashImageDataSource
 import com.example.chefia.data.repository.RecipeRepositoryImpl
 import com.example.chefia.domain.repository.RecipeRepository
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
@@ -47,10 +49,17 @@ val recipeModule = module {
         )
     }
 
+    single<RecipeImageDataSource> {
+        UnsplashImageDataSource(
+            httpClient = get(),
+        )
+    }
+
     single<RecipeRepository> {
         RecipeRepositoryImpl(
             aiDataSource = get(),
             localDataSource = get(),
+            imageDataSource = get(),
         )
     }
 

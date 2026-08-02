@@ -2,15 +2,16 @@ package com.example.chefia.domain.usecase
 
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.repository.RecipeRepository
+import kotlinx.coroutines.flow.Flow
 import java.util.Locale
 
 class GenerateRecipesUseCase(
     private val repository: RecipeRepository,
 ) {
 
-    suspend operator fun invoke(
+    operator fun invoke(
         ingredients: List<String>,
-    ): List<Recipe> {
+    ): Flow<List<Recipe>> {
         val normalizedIngredients = ingredients
             .map(String::trim)
             .filter(String::isNotBlank)

@@ -10,6 +10,7 @@ import com.example.chefia.feature.recipe.mapper.RecipeErrorMapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -70,26 +71,26 @@ class RecipeGenerationViewModel(
         generationJob = viewModelScope.launch {
             updateLoadingState()
 
-            runCatching {
-                generateRecipesUseCase(ingredients)
-            }.onSuccess { recipes ->
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        favoriteRecipeIds = emptySet(),
-                        status = RecipeGenerationStatus.Success(
-                            recipes = recipes,
-                        ),
-                    )
+            generateRecipesUseCase(ingredients)
+                .onEach { recipes ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            status = RecipeGenerationStatus.Success(
+                                recipes = recipes,
+                            ),
+                        )
+                    }
                 }
-            }.onFailure { error ->
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        status = RecipeGenerationStatus.Error(
-                            message = RecipeErrorMapper.map(error),
-                        ),
-                    )
+                .catch { error ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            status = RecipeGenerationStatus.Error(
+                                message = RecipeErrorMapper.map(error),
+                            ),
+                        )
+                    }
                 }
-            }
+                .launchIn(this)
         }
     }
 
