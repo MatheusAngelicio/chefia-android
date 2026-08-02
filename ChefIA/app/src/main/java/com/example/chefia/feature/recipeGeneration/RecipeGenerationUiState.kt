@@ -1,4 +1,4 @@
-package com.example.chefia.feature.recipe
+package com.example.chefia.feature.recipeGeneration
 
 import com.example.chefia.core.common.UiText
 import com.example.chefia.domain.model.Recipe

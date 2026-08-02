@@ -1,5 +1,8 @@
 package com.example.chefia.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Recipe(
     val id: String,
     val name: String,

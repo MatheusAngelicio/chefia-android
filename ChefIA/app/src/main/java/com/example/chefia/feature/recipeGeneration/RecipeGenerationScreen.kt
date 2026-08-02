@@ -1,4 +1,4 @@
-package com.example.chefia.feature.recipe
+package com.example.chefia.feature.recipeGeneration
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -40,20 +41,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chefia.core.common.UiText
 import com.example.chefia.core.designsystem.components.ChefIAButton
+import com.example.chefia.core.designsystem.components.ChefIATopBar
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.model.RecipeDifficulty
-import com.example.chefia.core.designsystem.components.ChefIATopBar
-import com.example.chefia.feature.recipe.components.RecipeLoadingAnimation
-import com.example.chefia.feature.recipe.components.RecipeResultCard
+import com.example.chefia.feature.recipeGeneration.components.RecipeLoadingAnimation
+import com.example.chefia.feature.recipeGeneration.components.RecipeResultCard
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.foundation.lazy.items
 
 @Composable
 fun RecipeGenerationScreen(
     ingredients: List<String>,
     onBackClick: () -> Unit,
+    onRecipeClick: (Recipe) -> Unit,
     viewModel: RecipeGenerationViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,6 +65,14 @@ fun RecipeGenerationScreen(
                 ingredients = ingredients,
             ),
         )
+    }
+
+    val onAction: (RecipeGenerationAction) -> Unit = { action ->
+        when (action) {
+            is RecipeGenerationAction.RecipeClicked -> onRecipeClick(action.recipe)
+            else -> Unit
+        }
+        viewModel.onAction(action)
     }
 
     Scaffold(
@@ -84,7 +93,7 @@ fun RecipeGenerationScreen(
                 RecipeResultsContent(
                     recipes = status.recipes,
                     favoriteRecipeIds = state.favoriteRecipeIds,
-                    onAction = viewModel::onAction,
+                    onAction = onAction,
                     modifier = Modifier.padding(innerPadding),
                 )
             }
@@ -93,7 +102,7 @@ fun RecipeGenerationScreen(
                 RecipeGenerationErrorContent(
                     message = status.message,
                     onRetry = {
-                        viewModel.onAction(
+                        onAction(
                             RecipeGenerationAction.RetryClicked,
                         )
                     },
@@ -299,7 +308,7 @@ private fun RecipeResultsContent(
                 onRecipeClicked = {
                     onAction(
                         RecipeGenerationAction.RecipeClicked(
-                            recipeId = recipe.id,
+                            recipe = recipe,
                         ),
                     )
                 },

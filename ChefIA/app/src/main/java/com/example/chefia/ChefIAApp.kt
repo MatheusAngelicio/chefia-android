@@ -6,9 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.chefia.core.navigation.ChefIADestination
+import com.example.chefia.core.navigation.RecipeNavType
+import com.example.chefia.domain.model.Recipe
 import com.example.chefia.feature.home.HomeScreen
 import com.example.chefia.feature.ingredients.IngredientsScreen
-import com.example.chefia.feature.recipe.RecipeGenerationScreen
+import com.example.chefia.feature.recipeGeneration.RecipeGenerationScreen
+import com.example.chefia.feature.recipeDetails.RecipeDetailsScreen
 import com.example.chefia.feature.splash.SplashScreen
 
 @Composable
@@ -36,6 +39,9 @@ fun ChefIAApp() {
                 onNavigateToIngredients = {
                     navController.navigate(ChefIADestination.Ingredients)
                 },
+                onRecipeClick = { recipe ->
+                    navController.navigate(ChefIADestination.RecipeDetails(recipe))
+                }
             )
         }
 
@@ -62,6 +68,27 @@ fun ChefIAApp() {
 
             RecipeGenerationScreen(
                 ingredients = destination.ingredients,
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                onRecipeClick = { recipe ->
+                    navController.navigate(ChefIADestination.RecipeDetails(recipe))
+                }
+            )
+        }
+
+        composable<ChefIADestination.RecipeDetails>(
+            typeMap = mapOf(
+                kotlin.reflect.typeOf<Recipe>() to RecipeNavType
+            )
+        ) { backStackEntry ->
+            val destination =
+                backStackEntry.toRoute<
+                        ChefIADestination.RecipeDetails
+                        >()
+
+            RecipeDetailsScreen(
+                recipe = destination.recipe,
                 onBackClick = {
                     navController.navigateUp()
                 }

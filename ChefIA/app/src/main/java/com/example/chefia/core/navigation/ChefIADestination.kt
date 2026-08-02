@@ -1,5 +1,6 @@
 package com.example.chefia.core.navigation
 
+import com.example.chefia.domain.model.Recipe
 import kotlinx.serialization.Serializable
 
 sealed interface ChefIADestination {
@@ -16,5 +17,10 @@ sealed interface ChefIADestination {
     @Serializable
     data class RecipeGeneration(
         val ingredients: List<String>,
+    ) : ChefIADestination
+
+    @Serializable
+    data class RecipeDetails(
+        val recipe: Recipe,
     ) : ChefIADestination
 }

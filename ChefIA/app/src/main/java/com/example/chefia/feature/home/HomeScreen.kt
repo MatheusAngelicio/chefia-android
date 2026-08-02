@@ -41,6 +41,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     onNavigateToIngredients: () -> Unit,
+    onRecipeClick: (Recipe) -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -60,7 +61,7 @@ fun HomeScreen(
                     HomeAction.TypeIngredientsClicked ->
                         onNavigateToIngredients()
 
-                    is HomeAction.RecipeClicked -> Unit
+                    is HomeAction.RecipeClicked -> onRecipeClick(action.recipe)
                     HomeAction.ViewAllFavoritesClicked -> Unit
                 }
                 viewModel.onAction(action)

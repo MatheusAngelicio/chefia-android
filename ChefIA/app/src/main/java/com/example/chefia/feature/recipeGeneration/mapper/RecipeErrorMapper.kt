@@ -1,4 +1,4 @@
-package com.example.chefia.feature.recipe.mapper
+package com.example.chefia.feature.recipeGeneration.mapper
 
 import android.accounts.NetworkErrorException
 import com.example.chefia.R

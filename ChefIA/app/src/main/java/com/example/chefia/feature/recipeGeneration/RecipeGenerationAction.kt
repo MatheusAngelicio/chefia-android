@@ -1,4 +1,4 @@
-package com.example.chefia.feature.recipe
+package com.example.chefia.feature.recipeGeneration
 
 import com.example.chefia.domain.model.Recipe
 
@@ -15,6 +15,6 @@ sealed interface RecipeGenerationAction {
     ) : RecipeGenerationAction
 
     data class RecipeClicked(
-        val recipeId: String,
+        val recipe: Recipe,
     ) : RecipeGenerationAction
 }

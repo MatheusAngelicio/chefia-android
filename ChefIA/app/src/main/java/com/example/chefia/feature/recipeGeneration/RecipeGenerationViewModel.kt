@@ -1,4 +1,4 @@
-package com.example.chefia.feature.recipe
+package com.example.chefia.feature.recipeGeneration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,7 @@ import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipeIdsUseCase
 import com.example.chefia.domain.usecase.favorites.ToggleFavoriteRecipeUseCase
-import com.example.chefia.feature.recipe.mapper.RecipeErrorMapper
+import com.example.chefia.feature.recipeGeneration.mapper.RecipeErrorMapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

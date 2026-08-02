@@ -1,4 +1,4 @@
-package com.example.chefia.feature.recipe.components
+package com.example.chefia.feature.recipeGeneration.components
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
