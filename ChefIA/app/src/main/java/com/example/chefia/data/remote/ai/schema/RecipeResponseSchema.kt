@@ -3,9 +3,24 @@ package com.example.chefia.data.remote.ai.schema
 import com.example.chefia.data.remote.ai.model.GenerateRecipesResponseDto
 import com.example.chefia.data.remote.ai.model.RecipeDto
 import com.example.chefia.data.remote.ai.model.RecipeIngredientDto
+import com.example.chefia.data.remote.ai.model.RecipeStepDto
 import com.google.firebase.ai.type.JsonSchema
 
 object RecipeResponseSchema {
+
+    private val stepSchema =
+        JsonSchema.obj(
+            properties = mapOf(
+                "title" to JsonSchema.string(
+                    description = "Título curto da etapa em português (ex: PREPARAÇÃO, MONTAGEM).",
+                ),
+                "description" to JsonSchema.string(
+                    description = "Descrição detalhada da etapa em português.",
+                ),
+            ),
+            clazz = RecipeStepDto::class,
+            description = "Uma etapa do modo de preparo.",
+        )
 
     private val ingredientSchema =
         JsonSchema.obj(
@@ -55,10 +70,8 @@ object RecipeResponseSchema {
                     minItems = 1,
                 ),
                 "preparationSteps" to JsonSchema.array(
-                    items = JsonSchema.string(
-                        description = "Uma etapa clara do modo de preparo.",
-                    ),
-                    description = "Modo de preparo ordenado.",
+                    items = stepSchema,
+                    description = "Modo de preparo ordenado com títulos e descrições.",
                     minItems = 1,
                 ),
                 "caloriesPerServingKcal" to JsonSchema.integer(

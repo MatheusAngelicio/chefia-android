@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.model.RecipeDifficulty
 import com.example.chefia.domain.model.RecipeIngredient
+import com.example.chefia.domain.model.RecipeStep
 
 @Entity(tableName = "recipes")
 data class RecipeEntity(
@@ -16,7 +17,7 @@ data class RecipeEntity(
     val caloriesPerServingKcal: Int,
     val difficulty: RecipeDifficulty,
     val ingredients: List<RecipeIngredient>,
-    val preparationSteps: List<String>,
+    val preparationSteps: List<RecipeStep>,
     val imageUrl: String? = null,
     val favoritedAt: Long = System.currentTimeMillis(),
 )

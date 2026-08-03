@@ -9,7 +9,7 @@ import com.example.chefia.data.local.entity.RecipeEntity
 
 @Database(
     entities = [RecipeEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(RecipeTypeConverters::class)

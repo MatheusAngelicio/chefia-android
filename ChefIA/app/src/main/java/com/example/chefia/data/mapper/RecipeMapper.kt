@@ -4,6 +4,7 @@ import com.example.chefia.data.remote.ai.model.GenerateRecipesResponseDto
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.model.RecipeDifficulty
 import com.example.chefia.domain.model.RecipeIngredient
+import com.example.chefia.domain.model.RecipeStep
 import java.util.Locale
 import java.util.UUID
 
@@ -26,8 +27,12 @@ fun GenerateRecipesResponseDto.toDomain(): List<Recipe> {
                     isAvailable = ingredientDto.isAvailable,
                 )
             },
-            preparationSteps =
-                recipeDto.preparationSteps,
+            preparationSteps = recipeDto.preparationSteps.map { stepDto ->
+                RecipeStep(
+                    title = stepDto.title,
+                    description = stepDto.description,
+                )
+            },
         )
     }
 }

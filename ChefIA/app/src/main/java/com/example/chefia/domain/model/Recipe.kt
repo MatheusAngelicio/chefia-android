@@ -12,7 +12,7 @@ data class Recipe(
     val caloriesPerServingKcal: Int,
     val difficulty: RecipeDifficulty,
     val ingredients: List<RecipeIngredient>,
-    val preparationSteps: List<String>,
+    val preparationSteps: List<RecipeStep>,
     val imageUrl: String? = null,
 ) {
     val availableIngredientsCount: Int

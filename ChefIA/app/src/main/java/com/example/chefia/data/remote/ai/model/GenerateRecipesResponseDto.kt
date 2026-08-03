@@ -16,7 +16,13 @@ data class RecipeDto(
     val caloriesPerServingKcal: Int,
     val difficulty: String,
     val ingredients: List<RecipeIngredientDto>,
-    val preparationSteps: List<String>,
+    val preparationSteps: List<RecipeStepDto>,
+)
+
+@Serializable
+data class RecipeStepDto(
+    val title: String,
+    val description: String,
 )
 
 @Serializable
