@@ -1,13 +1,17 @@
 package com.example.chefia.feature.ingredients
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,7 +26,7 @@ import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.feature.ingredients.components.IngredientInput
 import com.example.chefia.feature.ingredients.components.IngredientSuggestionChip
-import com.example.chefia.feature.ingredients.components.IngredientsCart
+import com.example.chefia.feature.ingredients.components.ingredientsCart
 import com.example.chefia.feature.ingredients.components.IngredientsCountBadge
 import com.example.chefia.feature.ingredients.components.IngredientsPreferences
 import com.example.chefia.feature.ingredients.components.IngredientsTopBar
@@ -67,7 +71,7 @@ fun IngredientsScreen(
         )
     }
 }
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun IngredientsContent(
     state: IngredientsUiState,
@@ -79,118 +83,134 @@ private fun IngredientsContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(
-                horizontal = spacing.lg,
-                vertical = spacing.md,
-            ),
+            .padding(spacing.lg),
     ) {
-        Text(
-            text = "Adicione seus\ningredientes",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
-
-        Text(
-            text = "O ChefIA irá sugerir receitas baseadas no que você já tem em casa.",
-            modifier = Modifier.padding(top = spacing.xs),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-
-        IngredientInput(
-            value = state.currentIngredient,
-            onValueChanged = {
-                onAction(
-                    IngredientsAction.IngredientChanged(it),
-                )
-            },
-            onAddClicked = {
-                onAction(IngredientsAction.AddIngredient)
-            },
-            modifier = Modifier.padding(top = spacing.lg),
-        )
-
-        Text(
-            text = "SUGESTÕES COMUNS",
-            modifier = Modifier.padding(
-                top = spacing.md,
-                bottom = spacing.xs,
-            ),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(spacing.xs),
-            verticalArrangement = Arrangement.spacedBy(spacing.xs),
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(spacing.md),
+            contentPadding = PaddingValues(bottom = spacing.lg),
         ) {
-            state.suggestions.forEach { suggestion ->
-                IngredientSuggestionChip(
-                    name = suggestion.name,
-                    emoji = suggestion.emoji,
-                    onClick = {
+            item {
+                Text(
+                    text = "Adicione seus\ningredientes",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+
+                Text(
+                    text = "O ChefIA irá sugerir receitas baseadas no que você já tem em casa.",
+                    modifier = Modifier.padding(top = spacing.xs),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            item {
+                IngredientInput(
+                    value = state.currentIngredient,
+                    onValueChanged = {
                         onAction(
-                            IngredientsAction.SuggestionClicked(
-                                ingredient = suggestion.name,
+                            IngredientsAction.IngredientChanged(it),
+                        )
+                    },
+                    onAddClicked = {
+                        onAction(IngredientsAction.AddIngredient)
+                    },
+                    modifier = Modifier.padding(top = spacing.lg),
+                )
+            }
+
+            item {
+                Column {
+                    Text(
+                        text = "SUGESTÕES COMUNS",
+                        modifier = Modifier.padding(
+                            top = spacing.md,
+                            bottom = spacing.xs,
+                        ),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(spacing.xs),
+                        verticalArrangement = Arrangement.spacedBy(spacing.xs),
+                    ) {
+                        state.suggestions.forEach { suggestion ->
+                            IngredientSuggestionChip(
+                                name = suggestion.name,
+                                emoji = suggestion.emoji,
+                                onClick = {
+                                    onAction(
+                                        IngredientsAction.SuggestionClicked(
+                                            ingredient = suggestion.name,
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                ServingsSelector(
+                    servings = state.servings,
+                    onServingsChange = { servings ->
+                        onAction(
+                            IngredientsAction.ServingsChanged(
+                                servings = servings,
                             ),
                         )
                     },
+                    modifier = Modifier.padding(top = spacing.lg),
                 )
             }
-        }
 
-        ServingsSelector(
-            servings = state.servings,
-            onServingsChange = { servings ->
-                onAction(
-                    IngredientsAction.ServingsChanged(
-                        servings = servings,
-                    ),
+            item {
+                IngredientsPreferences(
+                    isFitness = state.isFitness,
+                    isBudget = state.isBudget,
+                    onFitnessToggled = {
+                        onAction(IngredientsAction.FitnessToggled(it))
+                    },
+                    onBudgetToggled = {
+                        onAction(IngredientsAction.BudgetToggled(it))
+                    },
+                    modifier = Modifier.padding(top = spacing.lg),
                 )
-            },
-            modifier = Modifier.padding(top = spacing.lg),
-        )
-        IngredientsPreferences(
-            isFitness = state.isFitness,
-            isBudget = state.isBudget,
-            onFitnessToggled = {
-                onAction(IngredientsAction.FitnessToggled(it))
-            },
-            onBudgetToggled = {
-                onAction(IngredientsAction.BudgetToggled(it))
-            },
-            modifier = Modifier.padding(top = spacing.lg),
-        )
+            }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = spacing.lg),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Seu Carrinho",
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            stickyHeader {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(top = spacing.xl, bottom = spacing.md),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Seu Carrinho",
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
 
-            IngredientsCountBadge(
-                count = state.ingredients.size,
+                    IngredientsCountBadge(
+                        count = state.ingredients.size,
+                    )
+                }
+            }
+
+            ingredientsCart(
+                ingredients = state.ingredients,
+                onRemoveIngredient = {
+                    onAction(
+                        IngredientsAction.RemoveIngredient(it),
+                    )
+                }
             )
         }
-
-        IngredientsCart(
-            ingredients = state.ingredients,
-            onRemoveIngredient = {
-                onAction(
-                    IngredientsAction.RemoveIngredient(it),
-                )
-            },
-            modifier = Modifier
-                .weight(1f)
-                .padding(vertical = spacing.md),
-        )
 
         ChefIAButton(
             text = "Encontrar receitas",
@@ -199,6 +219,7 @@ private fun IngredientsContent(
                     IngredientsAction.FindRecipesClicked,
                 )
             },
+            modifier = Modifier.fillMaxWidth(),
             enabled = state.canFindRecipes,
         )
     }

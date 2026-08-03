@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -37,16 +38,41 @@ fun IngredientsCart(
     onRemoveIngredient: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (ingredients.isEmpty()) {
-        EmptyIngredientsCart(
-            modifier = modifier,
-        )
-    } else {
-        IngredientsList(
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sm),
+    ) {
+        ingredientsCart(
             ingredients = ingredients,
             onRemoveIngredient = onRemoveIngredient,
-            modifier = modifier,
         )
+    }
+}
+
+fun LazyListScope.ingredientsCart(
+    ingredients: List<String>,
+    onRemoveIngredient: (String) -> Unit,
+) {
+    if (ingredients.isEmpty()) {
+        item {
+            EmptyIngredientsCart(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
+            )
+        }
+    } else {
+        items(
+            items = ingredients,
+            key = { ingredient -> ingredient },
+        ) { ingredient ->
+            IngredientCartItem(
+                ingredient = ingredient,
+                onRemoveClicked = {
+                    onRemoveIngredient(ingredient)
+                },
+            )
+        }
     }
 }
 
@@ -57,7 +83,7 @@ private fun EmptyIngredientsCart(
     val spacing = MaterialTheme.spacing
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -86,32 +112,6 @@ private fun EmptyIngredientsCart(
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(spacing.sm))
-    }
-}
-
-@Composable
-private fun IngredientsList(
-    ingredients: List<String>,
-    onRemoveIngredient: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val spacing = MaterialTheme.spacing
-
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(spacing.sm),
-    ) {
-        items(
-            items = ingredients,
-            key = { ingredient -> ingredient },
-        ) { ingredient ->
-            IngredientCartItem(
-                ingredient = ingredient,
-                onRemoveClicked = {
-                    onRemoveIngredient(ingredient)
-                },
-            )
-        }
     }
 }
 
