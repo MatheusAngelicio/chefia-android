@@ -6,7 +6,6 @@ import com.example.chefia.domain.model.Recipe
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipeIdsUseCase
 import com.example.chefia.domain.usecase.favorites.ToggleFavoriteRecipeUseCase
-import com.example.chefia.feature.recipeGeneration.mapper.RecipeErrorMapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -96,7 +95,7 @@ class RecipeGenerationViewModel(
                     _uiState.update { currentState ->
                         currentState.copy(
                             status = RecipeGenerationStatus.Error(
-                                message = RecipeErrorMapper.map(error),
+                                message = "Ops! Algo deu errado ao criar sua receita. Tente novamente.",
                             ),
                         )
                     }

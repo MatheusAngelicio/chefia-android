@@ -1,6 +1,5 @@
 package com.example.chefia.feature.recipeGeneration
 
-import com.example.chefia.core.common.UiText
 import com.example.chefia.domain.model.Recipe
 
 data class RecipeGenerationUiState(
@@ -19,6 +18,6 @@ sealed interface RecipeGenerationStatus {
     ) : RecipeGenerationStatus
 
     data class Error(
-        val message: UiText,
+        val message: String,
     ) : RecipeGenerationStatus
 }

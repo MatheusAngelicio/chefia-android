@@ -39,7 +39,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.chefia.core.common.UiText
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.components.ChefIATopBar
 import com.example.chefia.core.designsystem.theme.ChefIATheme
@@ -330,7 +329,7 @@ private fun RecipeResultsContent(
 
 @Composable
 private fun RecipeGenerationErrorContent(
-    message: UiText,
+    message: String,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -351,7 +350,7 @@ private fun RecipeGenerationErrorContent(
         )
 
         Text(
-            text = message.asString(),
+            text = message,
             modifier = Modifier.padding(
                 top = spacing.md,
                 bottom = spacing.lg,
@@ -416,7 +415,7 @@ private fun RecipeSuccessContentPreview() {
 private fun RecipeErrorContentPreview() {
     ChefIATheme {
         RecipeGenerationErrorContent(
-            message = UiText.DynamicString("Não foi possível conectar ao servidor. Verifique sua conexão."),
+            message = "Não foi possível conectar ao servidor. Verifique sua conexão.",
             onRetry = {}
         )
     }
