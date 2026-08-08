@@ -10,6 +10,7 @@ import com.example.chefia.domain.usecase.GenerateRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipeIdsUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ToggleFavoriteRecipeUseCase
+import com.example.chefia.feature.recipeDetails.RecipeDetailsViewModel
 import com.example.chefia.feature.recipeGeneration.RecipeGenerationViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.ai.GenerativeModel
@@ -88,4 +89,5 @@ val recipeModule = module {
     }
 
     viewModelOf(::RecipeGenerationViewModel)
+    viewModelOf(::RecipeDetailsViewModel)
 }
