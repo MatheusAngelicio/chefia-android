@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.example.chefia.core.designsystem.components.ChefIAAiBadge
 import com.example.chefia.core.designsystem.theme.spacing
 
 @Composable
@@ -81,6 +82,12 @@ fun RecipeExecutionImageHeader(
                 )
             }
         }
+
+        ChefIAAiBadge(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(spacing.md),
+        )
 
         // Badge "Sugestão ChefIA"
         Card(

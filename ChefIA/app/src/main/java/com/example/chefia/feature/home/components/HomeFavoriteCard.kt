@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.example.chefia.core.designsystem.components.ChefIAAiBadge
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.domain.model.Recipe
@@ -111,6 +112,12 @@ fun HomeFavoriteCard(
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
+
+                ChefIAAiBadge(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(spacing.sm),
+                )
             }
 
             Spacer(modifier = Modifier.height(spacing.sm))

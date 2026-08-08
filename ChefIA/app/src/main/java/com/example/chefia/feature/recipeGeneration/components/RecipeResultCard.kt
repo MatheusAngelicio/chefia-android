@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.example.chefia.core.designsystem.components.ChefIAAiBadge
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.components.ChefIAProgressIndicator
 import com.example.chefia.core.designsystem.theme.ChefIATheme
@@ -103,6 +104,12 @@ fun RecipeResultCard(
                     }
                 )
             }
+
+            ChefIAAiBadge(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(spacing.md),
+            )
 
             Surface(
                 modifier = Modifier

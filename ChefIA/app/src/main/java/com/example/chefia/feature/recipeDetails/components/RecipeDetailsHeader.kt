@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.example.chefia.core.designsystem.components.ChefIAAiBadge
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.feature.recipeGeneration.components.visualStyle
@@ -68,6 +69,12 @@ fun RecipeDetailsHeader(
                 style = MaterialTheme.typography.displayLarge,
             )
         }
+
+        ChefIAAiBadge(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(spacing.lg),
+        )
 
         Box(
             modifier = Modifier
