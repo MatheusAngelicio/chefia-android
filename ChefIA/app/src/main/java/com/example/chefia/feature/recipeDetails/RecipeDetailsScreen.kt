@@ -39,6 +39,7 @@ import com.example.chefia.feature.recipeDetails.components.RecipeDetailsSummary
 fun RecipeDetailsScreen(
     recipe: Recipe,
     onBackClick: () -> Unit,
+    onStartRecipeClick: (Recipe) -> Unit,
 ) {
     val spacing = MaterialTheme.spacing
 
@@ -72,7 +73,7 @@ fun RecipeDetailsScreen(
                     ChefIAButton(
                         text = "Iniciar Receita",
                         onClick = {
-                            // TODO: Implement start recipe flow
+                            onStartRecipeClick(recipe)
                         },
                         modifier = Modifier
                             .padding(spacing.lg)
@@ -164,6 +165,7 @@ private fun RecipeDetailsScreenPreview() {
                 )
             ),
             onBackClick = {},
+            onStartRecipeClick = {},
         )
     }
 }

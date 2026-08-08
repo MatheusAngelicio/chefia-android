@@ -18,33 +18,37 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun ChefIATopBar(
     modifier: Modifier = Modifier,
+    title: String? = null,
     onBackClick: (() -> Unit)? = null,
+    navigationIcon: @Composable () -> Unit = {
+        if (onBackClick != null) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = "Voltar",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+        }
+    },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         title = {
             Text(
-                text = "ChefIA",
+                text = title ?: "ChefIA",
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold,
                 ),
-                color = MaterialTheme.colorScheme.primary,
+                color = if (title != null) {
+                    MaterialTheme.colorScheme.onBackground
+                } else {
+                    MaterialTheme.colorScheme.primary
+                },
             )
         },
-        navigationIcon = {
-            if (onBackClick != null) {
-                IconButton(
-                    onClick = onBackClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = "Voltar",
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            }
-        },
+        navigationIcon = navigationIcon,
         actions = actions,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,

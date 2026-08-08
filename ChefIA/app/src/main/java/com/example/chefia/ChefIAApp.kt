@@ -12,6 +12,7 @@ import com.example.chefia.feature.home.HomeScreen
 import com.example.chefia.feature.ingredients.IngredientsScreen
 import com.example.chefia.feature.recipeGeneration.RecipeGenerationScreen
 import com.example.chefia.feature.recipeDetails.RecipeDetailsScreen
+import com.example.chefia.feature.recipeExecution.RecipeExecutionScreen
 import com.example.chefia.feature.splash.SplashScreen
 
 @Composable
@@ -101,6 +102,25 @@ fun ChefIAApp() {
                 onBackClick = {
                     navController.navigateUp()
                 },
+                onStartRecipeClick = { recipe ->
+                    navController.navigate(ChefIADestination.RecipeExecution(recipe))
+                }
+            )
+        }
+
+        composable<ChefIADestination.RecipeExecution>(
+            typeMap = mapOf(
+                kotlin.reflect.typeOf<Recipe>() to RecipeNavType
+            )
+        ) { backStackEntry ->
+            val destination =
+                backStackEntry.toRoute<ChefIADestination.RecipeExecution>()
+
+            RecipeExecutionScreen(
+                recipe = destination.recipe,
+                onBackClick = {
+                    navController.navigateUp()
+                }
             )
         }
     }
