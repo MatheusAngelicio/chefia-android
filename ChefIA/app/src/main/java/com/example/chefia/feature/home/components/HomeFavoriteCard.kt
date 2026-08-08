@@ -116,7 +116,9 @@ fun HomeFavoriteCard(
                 ChefIAAiBadge(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(spacing.sm),
+                        .padding(spacing.sm)
+                        .size(28.dp),
+                    iconModifier = Modifier.size(16.dp),
                 )
             }
 

@@ -35,6 +35,7 @@ import com.example.chefia.domain.model.RecipeDifficulty
 import com.example.chefia.feature.home.components.HomeActionCard
 import com.example.chefia.feature.home.components.HomeActionCardOrientation
 import com.example.chefia.feature.home.components.HomeFavoriteCard
+import com.example.chefia.feature.home.components.HomeFavoritesEmptyState
 import com.example.chefia.core.designsystem.components.ChefIATopBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -136,30 +137,30 @@ private fun HomeContent(
             }
         }
 
-        if (state.favoriteRecipes.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(spacing.xxl))
+        Spacer(modifier = Modifier.height(spacing.xxl))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = spacing.lg),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = spacing.lg),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Favoritos",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+
+            TextButton(
+                onClick = { onAction(HomeAction.ViewAllFavoritesClicked) }
             ) {
-                Text(
-                    text = "Favoritos",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-
-                TextButton(
-                    onClick = { onAction(HomeAction.ViewAllFavoritesClicked) }
-                ) {
-                    Text(text = "Ver tudo")
-                }
+                Text(text = "Ver tudo")
             }
+        }
 
+        if (state.favoriteRecipes.isNotEmpty()) {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = spacing.lg),
                 horizontalArrangement = Arrangement.spacedBy(spacing.md),
@@ -174,11 +175,15 @@ private fun HomeContent(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(spacing.sm))
-
+        } else {
+            HomeFavoritesEmptyState(
+                modifier = Modifier.padding(horizontal = spacing.lg)
+            )
         }
+
+        Spacer(modifier = Modifier.height(spacing.sm))
     }
- }
+}
 
 
 @Preview(

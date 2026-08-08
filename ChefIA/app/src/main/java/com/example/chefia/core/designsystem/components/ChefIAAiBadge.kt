@@ -11,26 +11,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.chefia.core.designsystem.theme.ChefIAColors
+import com.example.chefia.core.designsystem.theme.ChefIADimensions
 
 @Composable
 fun ChefIAAiBadge(
     modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .size(28.dp)
             .background(
-                color = Color.Black.copy(alpha = 0.25f),
+                color = ChefIAColors.AccentGreen,
                 shape = CircleShape,
             ),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             imageVector = Icons.Rounded.AutoAwesome,
-            contentDescription = "Gerado por IA",
-            modifier = Modifier.size(16.dp),
-            tint = Color.White.copy(alpha = 0.7f),
+            contentDescription = null,
+            modifier = iconModifier,
+            tint = ChefIAColors.OnAccentGreen,
         )
     }
+}
+
+@Preview
+@Composable
+private fun ChefIAAiBadgePreview() {
+    ChefIAAiBadge()
 }

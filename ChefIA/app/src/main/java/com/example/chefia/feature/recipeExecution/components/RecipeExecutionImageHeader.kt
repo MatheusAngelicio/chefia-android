@@ -86,7 +86,9 @@ fun RecipeExecutionImageHeader(
         ChefIAAiBadge(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(spacing.md),
+                .padding(spacing.md)
+                .size(32.dp),
+            iconModifier = Modifier.size(18.dp),
         )
 
         // Badge "Sugestão ChefIA"

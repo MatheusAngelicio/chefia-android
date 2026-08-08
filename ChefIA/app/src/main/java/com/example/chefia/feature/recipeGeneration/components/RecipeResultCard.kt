@@ -108,7 +108,9 @@ fun RecipeResultCard(
             ChefIAAiBadge(
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(spacing.md),
+                    .padding(spacing.md)
+                    .size(28.dp),
+                iconModifier = Modifier.size(16.dp),
             )
 
             Surface(

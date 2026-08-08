@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chefia.R
+import com.example.chefia.core.designsystem.components.ChefIAAiBadge
 import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIADimensions
 import com.example.chefia.core.designsystem.theme.ChefIATheme
@@ -80,13 +81,17 @@ fun SplashIllustration(
                 ),
         )
 
-        AiDecoration(
+        ChefIAAiBadge(
             modifier = Modifier
                 .align(Alignment.BottomStart)
+                .size(ChefIADimensions.SplashDecorationCircleSize)
                 .offset(
                     x = 4.dp,
                     y = (-8).dp,
                 ),
+            iconModifier = Modifier.size(
+                ChefIADimensions.SplashDecorationIconSize,
+            ),
         )
     }
 }

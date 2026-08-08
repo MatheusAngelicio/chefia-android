@@ -73,7 +73,9 @@ fun RecipeDetailsHeader(
         ChefIAAiBadge(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(spacing.lg),
+                .padding(spacing.lg)
+                .size(32.dp),
+            iconModifier = Modifier.size(18.dp),
         )
 
         Box(
