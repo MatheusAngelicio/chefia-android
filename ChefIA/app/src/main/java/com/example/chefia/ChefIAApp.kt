@@ -76,9 +76,6 @@ fun ChefIAApp() {
                 onBackClick = {
                     navController.navigateUp()
                 },
-                onAddManualClick = {
-                    navController.navigate(ChefIADestination.Ingredients)
-                },
                 onConfirmClick = { ingredients, servings ->
                     navController.navigate(
                         ChefIADestination.RecipeGeneration(

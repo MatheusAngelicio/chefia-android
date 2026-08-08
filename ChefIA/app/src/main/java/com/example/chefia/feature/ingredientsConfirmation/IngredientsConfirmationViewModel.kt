@@ -27,8 +27,26 @@ class IngredientsConfirmationViewModel(
             is IngredientsConfirmationAction.ServingsChanged -> {
                 _uiState.update { it.copy(servings = action.servings) }
             }
-            IngredientsConfirmationAction.AddManualIngredient -> {
-                // To be handled by navigation
+            IngredientsConfirmationAction.AddManualIngredientClicked -> {
+                _uiState.update { it.copy(isAddIngredientSheetOpen = true, manualIngredientInput = "") }
+            }
+            is IngredientsConfirmationAction.ManualIngredientChanged -> {
+                _uiState.update { it.copy(manualIngredientInput = action.value) }
+            }
+            IngredientsConfirmationAction.SaveManualIngredient -> {
+                val newIngredient = _uiState.value.manualIngredientInput
+                if (newIngredient.isNotBlank()) {
+                    _uiState.update { 
+                        it.copy(
+                            ingredients = it.ingredients + newIngredient,
+                            isAddIngredientSheetOpen = false,
+                            manualIngredientInput = ""
+                        ) 
+                    }
+                }
+            }
+            IngredientsConfirmationAction.DismissAddIngredientSheet -> {
+                _uiState.update { it.copy(isAddIngredientSheetOpen = false) }
             }
             IngredientsConfirmationAction.Confirm -> {
                 // To be handled by navigation

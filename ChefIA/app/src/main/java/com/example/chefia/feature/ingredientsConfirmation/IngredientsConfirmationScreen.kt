@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.rounded.Eco
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,20 +43,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.example.chefia.core.designsystem.components.ChefIAButton
+import com.example.chefia.core.designsystem.components.ChefIABottomSheet
 import com.example.chefia.core.designsystem.components.ChefIATopBar
 import com.example.chefia.core.designsystem.components.ServingsSelector
 import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
+import com.example.chefia.feature.ingredients.components.IngredientInput
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IngredientsConfirmationScreen(
     ingredients: List<String>,
     photoPath: String,
     onBackClick: () -> Unit,
-    onAddManualClick: () -> Unit,
     onConfirmClick: (List<String>, Int) -> Unit,
     viewModel: IngredientsConfirmationViewModel = koinViewModel { parametersOf(ingredients, photoPath) },
 ) {
@@ -64,7 +68,6 @@ fun IngredientsConfirmationScreen(
         state = state,
         onAction = { action ->
             when (action) {
-                IngredientsConfirmationAction.AddManualIngredient -> onAddManualClick()
                 IngredientsConfirmationAction.Confirm -> onConfirmClick(state.ingredients, state.servings)
                 else -> viewModel.onAction(action)
             }
@@ -73,6 +76,7 @@ fun IngredientsConfirmationScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun IngredientsConfirmationContent(
     state: IngredientsConfirmationUiState,
@@ -86,143 +90,180 @@ private fun IngredientsConfirmationContent(
             ChefIATopBar(onBackClick = onBackClick)
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = spacing.lg)
-        ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(spacing.md)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = spacing.lg)
             ) {
-                item {
-                    Text(
-                        text = "Ingredientes Detectados",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = ChefIAColors.TextPrimary
-                    )
-                    Text(
-                        text = "Confirme o que encontramos na sua geladeira para sugerirmos a melhor receita.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = ChefIAColors.TextSecondary,
-                        modifier = Modifier.padding(top = spacing.xs)
-                    )
-                }
-
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                    ) {
-                        AsyncImage(
-                            model = state.photoPath,
-                            contentDescription = "Foto capturada",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                        
-                        Row(
-                            modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .padding(spacing.sm)
-                                .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(8.dp))
-                                .padding(horizontal = 8.dp, vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.CameraAlt,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "Foto recente",
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                        }
-                    }
-                }
-
-                item {
-                    ServingsSelector(
-                        servings = state.servings,
-                        onServingsChange = { servings ->
-                            onAction(IngredientsConfirmationAction.ServingsChanged(servings))
-                        },
-                        modifier = Modifier.padding(top = spacing.md)
-                    )
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(spacing.md)
+                ) {
+                    item {
                         Text(
-                            text = "Minha Lista",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
+                            text = "Ingredientes Detectados",
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = ChefIAColors.TextPrimary
                         )
-                        
+                        Text(
+                            text = "Confirme o que encontramos na sua geladeira para sugerirmos a melhor receita.",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = ChefIAColors.TextSecondary,
+                            modifier = Modifier.padding(top = spacing.xs)
+                        )
+                    }
+
+                    item {
                         Box(
                             modifier = Modifier
-                                .background(ChefIAColors.AccentGreen.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
-                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                        ) {
+                            AsyncImage(
+                                model = state.photoPath,
+                                contentDescription = "Foto capturada",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                            
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .padding(spacing.sm)
+                                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(8.dp))
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.CameraAlt,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = "Foto recente",
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
+                        }
+                    }
+
+                    item {
+                        ServingsSelector(
+                            servings = state.servings,
+                            onServingsChange = { servings ->
+                                onAction(IngredientsConfirmationAction.ServingsChanged(servings))
+                            },
+                            modifier = Modifier.padding(top = spacing.md)
+                        )
+                    }
+
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "${state.ingredients.size} Itens",
-                                color = ChefIAColors.OnAccentGreen,
-                                style = MaterialTheme.typography.labelMedium,
+                                text = "Minha Lista",
+                                style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold
                             )
+                            
+                            Box(
+                                modifier = Modifier
+                                    .background(ChefIAColors.AccentGreen.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
+                                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                            ) {
+                                Text(
+                                    text = "${state.ingredients.size} Itens",
+                                    color = ChefIAColors.OnAccentGreen,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+
+                    items(state.ingredients) { ingredient ->
+                        IngredientItem(
+                            name = ingredient,
+                            onRemove = { onAction(IngredientsConfirmationAction.RemoveIngredient(ingredient)) }
+                        )
+                    }
+
+                    item {
+                        TextButton(
+                            onClick = { onAction(IngredientsConfirmationAction.AddManualIngredientClicked) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .background(ChefIAColors.Secondary.copy(alpha = 0.2f), RoundedCornerShape(12.dp)),
+                            colors = ButtonDefaults.textButtonColors(contentColor = ChefIAColors.OnSecondary)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(Icons.Rounded.Add, contentDescription = null)
+                                Text(text = "Adicionar mais manualmente", fontWeight = FontWeight.Medium)
+                            }
                         }
                     }
                 }
 
-                items(state.ingredients) { ingredient ->
-                    IngredientItem(
-                        name = ingredient,
-                        onRemove = { onAction(IngredientsConfirmationAction.RemoveIngredient(ingredient)) }
-                    )
-                }
+                ChefIAButton(
+                    text = "Confirmar e Encontrar Receitas",
+                    onClick = { onAction(IngredientsConfirmationAction.Confirm) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = spacing.lg),
+                    trailingIcon = {
+                        Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = null)
+                    }
+                )
+            }
 
-                item {
-                    TextButton(
-                        onClick = { onAction(IngredientsConfirmationAction.AddManualIngredient) },
+            if (state.isAddIngredientSheetOpen) {
+                ChefIABottomSheet(
+                    onDismissRequest = { onAction(IngredientsConfirmationAction.DismissAddIngredientSheet) }
+                ) {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
-                            .background(ChefIAColors.Secondary.copy(alpha = 0.2f), RoundedCornerShape(12.dp)),
-                        colors = ButtonDefaults.textButtonColors(contentColor = ChefIAColors.OnSecondary)
+                            .padding(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(Icons.Rounded.Add, contentDescription = null)
-                            Text(text = "Adicionar mais manualmente", fontWeight = FontWeight.Medium)
-                        }
+                        Text(
+                            text = "Adicionar Ingrediente",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = ChefIAColors.TextPrimary
+                        )
+
+                        Text(
+                            text = "Digite o nome do ingrediente que você deseja adicionar.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = ChefIAColors.TextSecondary
+                        )
+
+                        IngredientInput(
+                            value = state.manualIngredientInput,
+                            onValueChanged = { onAction(IngredientsConfirmationAction.ManualIngredientChanged(it)) },
+                            onAddClicked = { onAction(IngredientsConfirmationAction.SaveManualIngredient) },
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
-
-            ChefIAButton(
-                text = "Confirmar e Encontrar Receitas",
-                onClick = { onAction(IngredientsConfirmationAction.Confirm) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = spacing.lg),
-                trailingIcon = {
-                    Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = null)
-                }
-            )
         }
     }
 }
