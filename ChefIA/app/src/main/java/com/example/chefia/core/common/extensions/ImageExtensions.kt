@@ -21,18 +21,16 @@ fun Bitmap.rotate(degrees: Int): Bitmap {
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
 
-private const val TEMP_PHOTO_NAME = "ingredients_capture.jpg"
-
 fun Bitmap.saveToTempFile(context: Context): String {
-    val file = File(context.cacheDir, TEMP_PHOTO_NAME)
+    val file = File(context.cacheDir, "temp_photo_${System.currentTimeMillis()}.jpg")
     FileOutputStream(file).use { out ->
         this.compress(Bitmap.CompressFormat.JPEG, 90, out)
     }
     return file.absolutePath
 }
 
-fun deleteTempPhoto(context: Context) {
-    val file = File(context.cacheDir, TEMP_PHOTO_NAME)
+fun deleteTempPhoto(path: String) {
+    val file = File(path)
     if (file.exists()) {
         file.delete()
     }

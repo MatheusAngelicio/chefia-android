@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.update
 class IngredientsConfirmationViewModel(
     ingredients: List<String>,
     photoPath: String,
-    private val onClearPhoto: () -> Unit,
+    private val onClearPhoto: (String) -> Unit,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -55,6 +55,6 @@ class IngredientsConfirmationViewModel(
     }
 
     override fun onCleared() {
-        onClearPhoto()
+        onClearPhoto(uiState.value.photoPath)
     }
 }
