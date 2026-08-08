@@ -17,7 +17,7 @@ object ChefIADimensions {
     // Splash
     val SplashIllustrationContainerSize = 300.dp
     val SplashIllustrationBackgroundSize = 260.dp
-    val SplashIllustrationImageSize = 210.dp
+    val SplashIllustrationImageSize = 270.dp
 
     val SplashDecorationCircleSize = 70.dp
     val SplashDecorationIconSize = 30.dp
