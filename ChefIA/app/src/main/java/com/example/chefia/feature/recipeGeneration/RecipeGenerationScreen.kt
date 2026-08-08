@@ -53,8 +53,6 @@ import org.koin.androidx.compose.koinViewModel
 fun RecipeGenerationScreen(
     ingredients: List<String>,
     servings: Int,
-    isFitness: Boolean = false,
-    isBudget: Boolean = false,
     onBackClick: () -> Unit,
     onRecipeClick: (Recipe) -> Unit,
     viewModel: RecipeGenerationViewModel = koinViewModel(),
@@ -64,15 +62,11 @@ fun RecipeGenerationScreen(
     LaunchedEffect(
         ingredients,
         servings,
-        isFitness,
-        isBudget,
     ) {
         viewModel.onAction(
             RecipeGenerationAction.GenerateRecipes(
                 ingredients = ingredients,
                 servings = servings,
-                isFitness = isFitness,
-                isBudget = isBudget,
             ),
         )
     }

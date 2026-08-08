@@ -28,7 +28,6 @@ import com.example.chefia.feature.ingredients.components.IngredientInput
 import com.example.chefia.feature.ingredients.components.IngredientSuggestionChip
 import com.example.chefia.feature.ingredients.components.ingredientsCart
 import com.example.chefia.feature.ingredients.components.IngredientsCountBadge
-import com.example.chefia.feature.ingredients.components.IngredientsPreferences
 import com.example.chefia.feature.ingredients.components.IngredientsTopBar
 import com.example.chefia.feature.ingredients.components.ServingsSelector
 import org.koin.compose.viewmodel.koinViewModel
@@ -39,8 +38,6 @@ fun IngredientsScreen(
     onNavigateToRecipeGeneration: (
         ingredients: List<String>,
         servings: Int,
-        isFitness: Boolean,
-        isBudget: Boolean,
     ) -> Unit,
     viewModel: IngredientsViewModel = koinViewModel(),
 ) {
@@ -59,8 +56,6 @@ fun IngredientsScreen(
                         onNavigateToRecipeGeneration(
                             state.ingredients,
                             state.servings,
-                            state.isFitness,
-                            state.isBudget,
                         )
                     }
 
@@ -162,20 +157,6 @@ private fun IngredientsContent(
                                 servings = servings,
                             ),
                         )
-                    },
-                    modifier = Modifier.padding(top = spacing.lg),
-                )
-            }
-
-            item {
-                IngredientsPreferences(
-                    isFitness = state.isFitness,
-                    isBudget = state.isBudget,
-                    onFitnessToggled = {
-                        onAction(IngredientsAction.FitnessToggled(it))
-                    },
-                    onBudgetToggled = {
-                        onAction(IngredientsAction.BudgetToggled(it))
                     },
                     modifier = Modifier.padding(top = spacing.lg),
                 )

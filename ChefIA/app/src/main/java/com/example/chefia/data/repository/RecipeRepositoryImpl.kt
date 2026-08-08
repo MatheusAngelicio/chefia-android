@@ -21,15 +21,11 @@ class RecipeRepositoryImpl(
     override fun generateRecipes(
         ingredients: List<String>,
         servings: Int,
-        isFitness: Boolean,
-        isBudget: Boolean,
     ): Flow<List<Recipe>> = flow {
         val recipes = aiDataSource
             .generateRecipes(
                 ingredients = ingredients,
                 servings = servings,
-                isFitness = isFitness,
-                isBudget = isBudget,
             )
             .toDomain()
 

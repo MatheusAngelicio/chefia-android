@@ -4,8 +4,6 @@ data class IngredientsUiState(
     val currentIngredient: String = "",
     val ingredients: List<String> = emptyList(),
     val suggestions: List<IngredientSuggestion> = defaultSuggestions,
-    val isFitness: Boolean = false,
-    val isBudget: Boolean = false,
     val servings: Int = 1,
 ) {
     val canFindRecipes: Boolean

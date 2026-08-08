@@ -16,14 +16,6 @@ sealed interface IngredientsAction {
         val ingredient: String,
     ) : IngredientsAction
 
-    data class FitnessToggled(
-        val isChecked: Boolean,
-    ) : IngredientsAction
-
-    data class BudgetToggled(
-        val isChecked: Boolean,
-    ) : IngredientsAction
-
     data class ServingsChanged(
         val servings: Int,
     ) : IngredientsAction
