@@ -21,10 +21,12 @@ object ChefIAColors {
     val Error = Color(0xFFD32F2F)
     val Border = Color(0xFFE5E5E5)
 
-    // Splash
     val Wave = Color(0xFFE4E6DA)
     val IllustrationBackground = Color(0xFFE2F6DF)
     val AccentGreen = Color(0xFF91F58F)
     val OnAccentGreen = Color(0xFF075D20)
     val ProgressTrack = Color(0xFFD5E8D6)
+
+    val White = Color(0xFFFFFFFF)
+    val Black = Color(0xFF000000)
 }

@@ -13,10 +13,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -40,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -53,8 +50,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chefia.core.common.extensions.rotate
-import com.example.chefia.core.common.extensions.toBitmap
 import com.example.chefia.core.designsystem.components.ChefIAButton
+import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.feature.camera.components.CameraFramingOverlay
@@ -123,7 +120,7 @@ private fun CameraContent(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = Color.Black
+        containerColor = ChefIAColors.Black
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -152,10 +149,10 @@ private fun CameraContent(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.5f)),
+                        .background(ChefIAColors.Black.copy(alpha = 0.5f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Color.White)
+                    CircularProgressIndicator(color = ChefIAColors.White)
                 }
             }
         }
@@ -198,7 +195,7 @@ private fun CameraCaptureContent(
                 Icon(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "Fechar",
-                    tint = Color.White,
+                    tint = ChefIAColors.White,
                     modifier = Modifier.size(28.dp)
                 )
             }
@@ -210,7 +207,7 @@ private fun CameraCaptureContent(
                 Icon(
                     imageVector = if (isFlashEnabled) Icons.Rounded.FlashOn else Icons.Rounded.FlashOff,
                     contentDescription = "Flash",
-                    tint = Color.White,
+                    tint = ChefIAColors.White,
                     modifier = Modifier.size(28.dp)
                 )
             }
@@ -222,19 +219,19 @@ private fun CameraCaptureContent(
                 .align(Alignment.TopCenter)
                 .padding(top = 76.dp)
                 .background(
-                    color = Color.Black.copy(alpha = 0.6f),
+                    color = ChefIAColors.Black .copy(alpha = 0.6f),
                     shape = RoundedCornerShape(32.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = Color.White.copy(alpha = 0.2f),
+                    color = ChefIAColors.White.copy(alpha = 0.2f),
                     shape = RoundedCornerShape(32.dp)
                 )
                 .padding(horizontal = 24.dp, vertical = 12.dp)
         ) {
             Text(
                 text = "Aponte para os ingredientes e\ntire uma foto",
-                color = Color.White,
+                color = ChefIAColors.White,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
@@ -252,7 +249,7 @@ private fun CameraCaptureContent(
             Box(
                 modifier = Modifier
                     .size(86.dp)
-                    .border(4.dp, Color.White.copy(alpha = 0.3f), CircleShape)
+                    .border(4.dp, ChefIAColors.White.copy(alpha = 0.3f), CircleShape)
             )
 
             // Inner Button
@@ -261,7 +258,7 @@ private fun CameraCaptureContent(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(70.dp)
-                    .background(Color.White, CircleShape)
+                    .background(ChefIAColors.White, CircleShape)
             ) {
                 // Empty - Just the white circle
             }
@@ -289,7 +286,7 @@ private fun CameraReviewContent(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 32.dp)
                     .background(
-                        color = Color.Black.copy(alpha = 0.7f),
+                        color = ChefIAColors.Black.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(horizontal = 20.dp, vertical = 10.dp)
@@ -297,7 +294,7 @@ private fun CameraReviewContent(
                 Text(
                     text = "Esta foto está boa?",
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color.White,
+                    color = ChefIAColors.White,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -306,7 +303,7 @@ private fun CameraReviewContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Black)
+                .background(ChefIAColors.Black)
                 .padding(MaterialTheme.spacing.lg)
         ) {
             ChefIAButton(
