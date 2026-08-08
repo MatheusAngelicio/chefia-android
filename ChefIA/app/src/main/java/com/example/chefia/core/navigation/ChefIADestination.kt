@@ -18,6 +18,12 @@ sealed interface ChefIADestination {
     data object Ingredients : ChefIADestination
 
     @Serializable
+    data class IngredientsConfirmation(
+        val ingredients: List<String>,
+        val photoPath: String,
+    ) : ChefIADestination
+
+    @Serializable
     data class RecipeGeneration(
         val ingredients: List<String>,
         val servings: Int,

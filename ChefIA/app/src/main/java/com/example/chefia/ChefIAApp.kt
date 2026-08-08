@@ -11,6 +11,7 @@ import com.example.chefia.domain.model.Recipe
 import com.example.chefia.feature.camera.CameraScreen
 import com.example.chefia.feature.home.HomeScreen
 import com.example.chefia.feature.ingredients.IngredientsScreen
+import com.example.chefia.feature.ingredientsConfirmation.IngredientsConfirmationScreen
 import com.example.chefia.feature.recipeGeneration.RecipeGenerationScreen
 import com.example.chefia.feature.recipeDetails.RecipeDetailsScreen
 import com.example.chefia.feature.recipeExecution.RecipeExecutionScreen
@@ -54,6 +55,37 @@ fun ChefIAApp() {
             CameraScreen(
                 onBack = {
                     navController.navigateUp()
+                },
+                onNavigateToIngredientsConfirmation = { ingredients, photoPath ->
+                    navController.navigate(
+                        ChefIADestination.IngredientsConfirmation(ingredients, photoPath)
+                    ) {
+                        popUpTo(ChefIADestination.Camera) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
+        composable<ChefIADestination.IngredientsConfirmation> { backStackEntry ->
+            val destination = backStackEntry.toRoute<ChefIADestination.IngredientsConfirmation>()
+            IngredientsConfirmationScreen(
+                ingredients = destination.ingredients,
+                photoPath = destination.photoPath,
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                onAddManualClick = {
+                    navController.navigate(ChefIADestination.Ingredients)
+                },
+                onConfirmClick = { ingredients ->
+                    navController.navigate(
+                        ChefIADestination.RecipeGeneration(
+                            ingredients = ingredients,
+                            servings = 1 // Default servings for now
+                        )
+                    )
                 }
             )
         }

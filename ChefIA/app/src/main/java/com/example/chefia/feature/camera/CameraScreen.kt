@@ -50,6 +50,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chefia.core.common.extensions.rotate
+import com.example.chefia.core.common.extensions.saveToTempFile
+import com.example.chefia.core.common.extensions.toBitmap
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIATheme
@@ -61,11 +63,19 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CameraScreen(
     onBack: () -> Unit,
+    onNavigateToIngredientsConfirmation: (ingredients: List<String>, photoPath: String) -> Unit,
     viewModel: CameraViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var hasCameraPermission by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.ingredientsIdentified.collect { (ingredients, bitmap) ->
+            val photoPath = bitmap.saveToTempFile(context)
+            onNavigateToIngredientsConfirmation(ingredients, photoPath)
+        }
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -111,7 +121,7 @@ fun CameraScreen(
 }
 
 @Composable
-private fun CameraContent(
+private fun  CameraContent(
     state: CameraUiState,
     hasCameraPermission: Boolean,
     onBack: () -> Unit,
@@ -153,6 +163,27 @@ private fun CameraContent(
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = ChefIAColors.White)
+                }
+            }
+
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(ChefIAColors.Black.copy(alpha = 0.7f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        CircularProgressIndicator(color = ChefIAColors.White)
+                        Text(
+                            text = "Identificando ingredientes...",
+                            color = ChefIAColors.White,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
         }
@@ -350,6 +381,22 @@ private fun CameraReviewPreview() {
         CameraContent(
             state = CameraUiState(
                 capturedImage = createBitmap(100, 100)
+            ),
+            hasCameraPermission = true,
+            onBack = {},
+            onAction = {},
+            onTakePicture = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CameraLoadingPreview() {
+    ChefIATheme {
+        CameraContent(
+            state = CameraUiState(
+              isLoading = true
             ),
             hasCameraPermission = true,
             onBack = {},

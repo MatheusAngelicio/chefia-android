@@ -1,5 +1,6 @@
 package com.example.chefia.domain.repository
 
+import android.graphics.Bitmap
 import com.example.chefia.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 
@@ -9,6 +10,10 @@ interface RecipeRepository {
         ingredients: List<String>,
         servings: Int,
     ): Flow<List<Recipe>>
+
+    fun identifyIngredientsFromImage(
+        bitmap: Bitmap,
+    ): Flow<List<String>>
 
     fun getFavoriteRecipeIds(): Flow<Set<String>>
 

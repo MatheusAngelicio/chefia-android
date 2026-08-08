@@ -1,5 +1,6 @@
 package com.example.chefia.data.repository
 
+import android.graphics.Bitmap
 import com.example.chefia.data.mapper.toDomain
 import com.example.chefia.data.remote.ai.RecipeAiDataSource
 import com.example.chefia.data.local.RecipeLocalDataSource
@@ -49,6 +50,11 @@ class RecipeRepositoryImpl(
 
         // Emite novamente com as URLs das imagens preenchidas.
         emit(recipesWithImages)
+    }
+
+    override fun identifyIngredientsFromImage(bitmap: Bitmap): Flow<List<String>> = flow {
+        val response = aiDataSource.identifyIngredients(bitmap)
+        emit(response.ingredients)
     }
 
     override fun getFavoriteRecipeIds(): Flow<Set<String>> {

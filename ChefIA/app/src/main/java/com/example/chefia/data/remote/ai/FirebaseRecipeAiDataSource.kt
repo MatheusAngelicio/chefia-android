@@ -1,9 +1,13 @@
 package com.example.chefia.data.remote.ai
 
+import android.graphics.Bitmap
 import android.util.Log
 import com.example.chefia.data.remote.ai.model.GenerateRecipesResponseDto
+import com.example.chefia.data.remote.ai.model.IdentifyIngredientsResponseDto
+import com.example.chefia.data.remote.ai.schema.IngredientsResponseSchema
 import com.example.chefia.data.remote.ai.schema.RecipeResponseSchema
 import com.google.firebase.ai.GenerativeModel
+import com.google.firebase.ai.type.content
 
 private const val TAG = "ChefIA_AI"
 
@@ -45,6 +49,43 @@ class FirebaseRecipeAiDataSource(
                 exception,
             )
 
+            throw exception
+        }
+    }
+
+    override suspend fun identifyIngredients(bitmap: Bitmap): IdentifyIngredientsResponseDto {
+        val prompt = content {
+            image(bitmap)
+            text(
+                """
+                Analise esta imagem e identifique todos os ingredientes culinários visíveis.
+                
+                Regras:
+                - Retorne apenas ingredientes que podem ser usados em receitas.
+                - Use nomes comuns em português do Brasil.
+                - Ignore objetos que não são comida.
+                - Se não houver ingredientes, retorne uma lista vazia.
+                """.trimIndent(),
+            )
+        }
+
+        Log.d(TAG, "Enviando imagem para identificação de ingredientes")
+
+        return try {
+            val response = generativeModel.generateObject(
+                jsonSchema = IngredientsResponseSchema.value,
+                prompt = prompt,
+            )
+
+            val result = requireNotNull(response.getObject()) {
+                "A IA não conseguiu identificar os ingredientes."
+            }
+
+            Log.d(TAG, "Ingredientes identificados: ${result.ingredients}")
+
+            result
+        } catch (exception: Exception) {
+            Log.e(TAG, "Erro ao identificar ingredientes", exception)
             throw exception
         }
     }

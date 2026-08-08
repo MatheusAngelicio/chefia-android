@@ -7,6 +7,7 @@ import com.example.chefia.data.remote.image.UnsplashImageDataSource
 import com.example.chefia.data.repository.RecipeRepositoryImpl
 import com.example.chefia.domain.repository.RecipeRepository
 import com.example.chefia.domain.usecase.GenerateRecipesUseCase
+import com.example.chefia.domain.usecase.IdentifyIngredientsFromImageUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipeIdsUseCase
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipesUseCase
 import com.example.chefia.domain.usecase.favorites.ToggleFavoriteRecipeUseCase
@@ -66,6 +67,12 @@ val recipeModule = module {
 
     factory {
         GenerateRecipesUseCase(
+            repository = get(),
+        )
+    }
+
+    factory {
+        IdentifyIngredientsFromImageUseCase(
             repository = get(),
         )
     }
