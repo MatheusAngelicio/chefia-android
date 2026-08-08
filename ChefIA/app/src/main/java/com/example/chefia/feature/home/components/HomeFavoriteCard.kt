@@ -53,7 +53,7 @@ fun HomeFavoriteCard(
 
     Card(
         modifier = modifier
-            .width(240.dp)
+            .width(260.dp)
             .clip(MaterialTheme.shapes.large)
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
@@ -96,23 +96,6 @@ fun HomeFavoriteCard(
                     }
                 )
 
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .align(Alignment.TopStart)
-                        .padding(4.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                            shape = CircleShape,
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = visualStyle.emoji,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-
                 ChefIAAiBadge(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -126,7 +109,7 @@ fun HomeFavoriteCard(
 
             Text(
                 text = recipe.name,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -148,7 +131,7 @@ fun HomeFavoriteCard(
 
                 Text(
                     text = "${recipe.preparationTimeMinutes} min",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
