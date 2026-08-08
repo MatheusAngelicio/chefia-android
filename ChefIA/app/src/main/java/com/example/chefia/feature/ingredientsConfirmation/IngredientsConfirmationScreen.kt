@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.components.ChefIATopBar
+import com.example.chefia.core.designsystem.components.ServingsSelector
 import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
@@ -54,7 +55,7 @@ fun IngredientsConfirmationScreen(
     photoPath: String,
     onBackClick: () -> Unit,
     onAddManualClick: () -> Unit,
-    onConfirmClick: (List<String>) -> Unit,
+    onConfirmClick: (List<String>, Int) -> Unit,
     viewModel: IngredientsConfirmationViewModel = koinViewModel { parametersOf(ingredients, photoPath) },
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,7 +65,7 @@ fun IngredientsConfirmationScreen(
         onAction = { action ->
             when (action) {
                 IngredientsConfirmationAction.AddManualIngredient -> onAddManualClick()
-                IngredientsConfirmationAction.Confirm -> onConfirmClick(state.ingredients)
+                IngredientsConfirmationAction.Confirm -> onConfirmClick(state.ingredients, state.servings)
                 else -> viewModel.onAction(action)
             }
         },
@@ -146,6 +147,16 @@ private fun IngredientsConfirmationContent(
                             )
                         }
                     }
+                }
+
+                item {
+                    ServingsSelector(
+                        servings = state.servings,
+                        onServingsChange = { servings ->
+                            onAction(IngredientsConfirmationAction.ServingsChanged(servings))
+                        },
+                        modifier = Modifier.padding(top = spacing.md)
+                    )
                 }
 
                 item {

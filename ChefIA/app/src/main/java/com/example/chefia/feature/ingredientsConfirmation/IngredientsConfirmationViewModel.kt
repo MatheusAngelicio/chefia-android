@@ -24,6 +24,9 @@ class IngredientsConfirmationViewModel(
             is IngredientsConfirmationAction.RemoveIngredient -> {
                 _uiState.update { it.copy(ingredients = it.ingredients - action.ingredient) }
             }
+            is IngredientsConfirmationAction.ServingsChanged -> {
+                _uiState.update { it.copy(servings = action.servings) }
+            }
             IngredientsConfirmationAction.AddManualIngredient -> {
                 // To be handled by navigation
             }

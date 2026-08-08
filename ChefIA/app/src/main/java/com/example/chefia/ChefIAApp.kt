@@ -79,11 +79,11 @@ fun ChefIAApp() {
                 onAddManualClick = {
                     navController.navigate(ChefIADestination.Ingredients)
                 },
-                onConfirmClick = { ingredients ->
+                onConfirmClick = { ingredients, servings ->
                     navController.navigate(
                         ChefIADestination.RecipeGeneration(
                             ingredients = ingredients,
-                            servings = 1 // Default servings for now
+                            servings = servings
                         )
                     )
                 }

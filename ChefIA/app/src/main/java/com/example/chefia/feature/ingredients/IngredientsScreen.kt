@@ -29,7 +29,7 @@ import com.example.chefia.feature.ingredients.components.IngredientSuggestionChi
 import com.example.chefia.feature.ingredients.components.ingredientsCart
 import com.example.chefia.feature.ingredients.components.IngredientsCountBadge
 import com.example.chefia.feature.ingredients.components.IngredientsTopBar
-import com.example.chefia.feature.ingredients.components.ServingsSelector
+import com.example.chefia.core.designsystem.components.ServingsSelector
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
