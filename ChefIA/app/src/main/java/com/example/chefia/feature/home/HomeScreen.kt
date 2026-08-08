@@ -42,6 +42,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     onNavigateToIngredients: () -> Unit,
+    onNavigateToCamera: () -> Unit,
     onRecipeClick: (Recipe) -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
@@ -58,10 +59,8 @@ fun HomeScreen(
             modifier = Modifier.padding(innerPadding),
             onAction = { action ->
                 when (action) {
-                    HomeAction.CameraClicked -> Unit
-                    HomeAction.TypeIngredientsClicked ->
-                        onNavigateToIngredients()
-
+                    HomeAction.CameraClicked -> onNavigateToCamera()
+                    HomeAction.TypeIngredientsClicked -> onNavigateToIngredients()
                     is HomeAction.RecipeClicked -> onRecipeClick(action.recipe)
                     HomeAction.ViewAllFavoritesClicked -> Unit
                 }
