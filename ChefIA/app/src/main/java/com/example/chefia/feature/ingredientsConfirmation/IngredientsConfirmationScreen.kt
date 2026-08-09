@@ -49,7 +49,7 @@ import com.example.chefia.core.designsystem.components.ServingsSelector
 import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
-import com.example.chefia.feature.ingredients.components.IngredientInput
+import com.example.chefia.feature.ingredientsConfirmation.components.AddIngredientBottomSheetContent
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -232,36 +232,14 @@ private fun IngredientsConfirmationContent(
 
             if (state.isAddIngredientSheetOpen) {
                 ChefIABottomSheet(
-                    onDismissRequest = { onAction(IngredientsConfirmationAction.DismissAddIngredientSheet) }
+                    onDismissRequest = { onAction(IngredientsConfirmationAction.DismissAddIngredientSheet) },
+                    title = "Adicionar Ingrediente"
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(
-                            text = "Adicionar Ingrediente",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = ChefIAColors.TextPrimary
-                        )
-
-                        Text(
-                            text = "Digite o nome do ingrediente que você deseja adicionar.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = ChefIAColors.TextSecondary
-                        )
-
-                        IngredientInput(
-                            value = state.manualIngredientInput,
-                            onValueChanged = { onAction(IngredientsConfirmationAction.ManualIngredientChanged(it)) },
-                            onAddClicked = { onAction(IngredientsConfirmationAction.SaveManualIngredient) },
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
+                    AddIngredientBottomSheetContent(
+                        value = state.manualIngredientInput,
+                        onValueChanged = { onAction(IngredientsConfirmationAction.ManualIngredientChanged(it)) },
+                        onAddClicked = { onAction(IngredientsConfirmationAction.SaveManualIngredient) }
+                    )
                 }
             }
         }
@@ -333,3 +311,20 @@ private fun IngredientsConfirmationPreview() {
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun IngredientsConfirmationBottomSheetPreview() {
+    ChefIATheme {
+        IngredientsConfirmationContent(
+            state = IngredientsConfirmationUiState(
+                ingredients = listOf("Tomate", "Ovos", "Alface", "Leite"),
+                photoPath = "",
+                isAddIngredientSheetOpen = true,
+            ),
+            onAction = {},
+            onBackClick = {}
+        )
+    }
+}
+
