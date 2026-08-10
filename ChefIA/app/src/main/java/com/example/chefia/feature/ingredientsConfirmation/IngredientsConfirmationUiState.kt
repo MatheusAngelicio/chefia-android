@@ -6,4 +6,6 @@ data class IngredientsConfirmationUiState(
     val servings: Int = 1,
     val isAddIngredientSheetOpen: Boolean = false,
     val manualIngredientInput: String = ""
-)
+) {
+    val canConfirm: Boolean get() = ingredients.isNotEmpty()
+}

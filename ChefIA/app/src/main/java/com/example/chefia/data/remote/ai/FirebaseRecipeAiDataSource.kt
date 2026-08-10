@@ -64,7 +64,8 @@ class FirebaseRecipeAiDataSource(
                 - Retorne apenas ingredientes que podem ser usados em receitas.
                 - Use nomes comuns em português do Brasil.
                 - Ignore objetos que não são comida.
-                - Se não houver ingredientes, retorne uma lista vazia.
+                - Se não houver ingredientes culinários visíveis, retorne a lista de ingredientes vazia [].
+                - Não retorne mensagens de erro ou avisos dentro da lista de ingredientes.
                 """.trimIndent(),
             )
         }

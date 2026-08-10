@@ -12,7 +12,7 @@ object IngredientsResponseSchema {
                     description = "Nome do ingrediente identificado em português."
                 ),
                 description = "Lista de ingredientes identificados na imagem.",
-                minItems = 1
+                minItems = 0
             )
         ),
         clazz = IdentifyIngredientsResponseDto::class,
