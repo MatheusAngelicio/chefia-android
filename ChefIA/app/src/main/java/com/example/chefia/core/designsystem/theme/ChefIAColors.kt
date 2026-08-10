@@ -29,4 +29,11 @@ object ChefIAColors {
 
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
+
+    // Ingredients
+    val IngredientAvailableBackground = Color(0xFFF5F5F5)
+    val IngredientAvailableIcon = Color(0xFF2E7D32)
+    val IngredientMissingBackground = Color(0xFFFFF7E6)
+    val IngredientMissingBorder = Color(0xFFFFE4B5)
+    val IngredientMissingText = Color(0xFF8B4513)
 }

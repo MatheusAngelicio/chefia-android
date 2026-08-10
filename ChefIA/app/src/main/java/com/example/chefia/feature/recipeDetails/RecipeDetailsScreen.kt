@@ -47,7 +47,6 @@ private fun RecipeDetailsScreenContent(
     isFavorite: Boolean,
     onBackClick: () -> Unit,
     onFavoriteClick: () -> Unit,
-    onShareClick: () -> Unit,
     onStartRecipeClick: () -> Unit,
 ) {
     val spacing = MaterialTheme.spacing
@@ -126,7 +125,6 @@ fun RecipeDetailsScreen(
         isFavorite = state.isFavorite,
         onBackClick = onBackClick,
         onFavoriteClick = { viewModel.toggleFavorite(recipe) },
-        onShareClick = { /* TODO: Implement share */ },
         onStartRecipeClick = { onStartRecipeClick(recipe) },
     )
 }
@@ -208,7 +206,6 @@ private fun RecipeDetailsScreenPreview() {
             isFavorite = true,
             onBackClick = {},
             onFavoriteClick = {},
-            onShareClick = {},
             onStartRecipeClick = {},
         )
     }

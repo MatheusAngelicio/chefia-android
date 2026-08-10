@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
 import com.example.chefia.domain.model.RecipeIngredient
@@ -72,21 +73,21 @@ private fun IngredientItem(
     val spacing = MaterialTheme.spacing
     
     val backgroundColor = if (ingredient.isAvailable) {
-        Color(0xFFF5F5F5) // Cinza claro
+        ChefIAColors.IngredientAvailableBackground
     } else {
-        Color(0xFFFFF7E6) // Laranja/creme muito claro
+        ChefIAColors.IngredientMissingBackground
     }
     
     val contentColor = if (ingredient.isAvailable) {
         MaterialTheme.colorScheme.onSurface
     } else {
-        Color(0xFF8B4513) // Marrom para itens faltantes
+        ChefIAColors.IngredientMissingText
     }
     
     val iconColor = if (ingredient.isAvailable) {
-        Color(0xFF2E7D32) // Verde escuro
+        ChefIAColors.IngredientAvailableIcon
     } else {
-        Color(0xFF8B4513)
+        ChefIAColors.IngredientMissingText
     }
 
     Row(
@@ -96,7 +97,7 @@ private fun IngredientItem(
             .background(backgroundColor)
             .then(
                 if (!ingredient.isAvailable) {
-                    Modifier.border(1.dp, Color(0xFFFFE4B5), RoundedCornerShape(12.dp))
+                    Modifier.border(1.dp, ChefIAColors.IngredientMissingBorder, RoundedCornerShape(12.dp))
                 } else Modifier
             )
             .padding(spacing.md),
@@ -109,20 +110,24 @@ private fun IngredientItem(
             tint = iconColor,
             modifier = Modifier.size(24.dp)
         )
-        
-        Text(
-            text = ingredient.name,
+
+        Column(
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium,
-            color = contentColor,
-        )
-        
-        Text(
-            text = ingredient.quantity,
-            style = MaterialTheme.typography.bodyMedium,
-            color = contentColor.copy(alpha = 0.8f),
-        )
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = ingredient.name,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = contentColor,
+            )
+
+            Text(
+                text = ingredient.quantity,
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor.copy(alpha = 0.8f),
+            )
+        }
     }
 }
 
@@ -134,7 +139,7 @@ private fun RecipeDetailsIngredientsPreview() {
             ingredients = listOf(
                 RecipeIngredient("2 filés de Salmão Fresco", "400g", true),
                 RecipeIngredient("Molho Teriyaki", "100ml", true),
-                RecipeIngredient("Brócolis Americano", "1 un", false),
+                RecipeIngredient("Espetinho de carne", "1 unidade(aproximadamente 150g)", true),
                 RecipeIngredient("Gergelim Branco", "10g", false),
                 RecipeIngredient("Arroz Jasmine", "1 xícara", true),
             )

@@ -111,6 +111,7 @@ class FirebaseRecipeAiDataSource(
             - Responda sempre em português do Brasil.
             - Todas as receitas devem render exatamente $servings ${if (servings == 1) "porção" else "porções"}.
             - Ajuste as quantidades dos ingredientes para a quantidade de porções solicitada.
+            - Seja extremamente conciso no campo de quantidade (ex: "500g", "1 un", "1/2 xícara"). Evite textos longos ou explicações adicionais na quantidade.
             - Priorize os ingredientes informados pelo usuário.
             - Você pode incluir ingredientes básicos adicionais, como sal, água, óleo e temperos.
             - Marque isAvailable como true somente quando o ingrediente estiver na lista informada pelo usuário.
