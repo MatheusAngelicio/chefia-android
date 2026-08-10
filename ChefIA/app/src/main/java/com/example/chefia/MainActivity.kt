@@ -12,6 +12,9 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        window.isNavigationBarContrastEnforced = false
+
         setContent {
             ChefIATheme {
                 ChefIAApp()
