@@ -3,6 +3,6 @@
     <item
         android:width="90dp"
         android:height="90dp"
-        android:drawable="@drawable/splash_chef"
+        android:drawable="@drawable/chefia_icon"
         android:gravity="center" />
 </layer-list>

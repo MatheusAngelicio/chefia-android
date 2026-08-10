@@ -61,7 +61,7 @@ fun SplashIllustration(
         IllustrationBackground()
 
         Image(
-            painter = painterResource(R.drawable.splash_chef),
+            painter = painterResource(R.drawable.chefia_icon),
             contentDescription = "Ingredientes frescos do ChefIA",
             modifier = Modifier
                 .size(ChefIADimensions.SplashIllustrationImageSize)

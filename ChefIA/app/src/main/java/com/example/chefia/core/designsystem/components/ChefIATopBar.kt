@@ -13,6 +13,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.chefia.core.designsystem.theme.ChefIATheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,4 +58,14 @@ fun ChefIATopBar(
             actionIconContentColor = MaterialTheme.colorScheme.primary,
         ),
     )
+}
+
+@Preview
+@Composable
+private fun ChefIATopBarPreview() {
+    ChefIATheme {
+        ChefIATopBar(
+            onBackClick = {},
+        )
+    }
 }
