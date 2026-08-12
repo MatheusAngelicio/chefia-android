@@ -44,6 +44,7 @@ fun HomeScreen(
     onNavigateToIngredients: () -> Unit,
     onNavigateToCamera: () -> Unit,
     onRecipeClick: (Recipe) -> Unit,
+    onViewAllFavoritesClick: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -62,7 +63,7 @@ fun HomeScreen(
                     HomeAction.CameraClicked -> onNavigateToCamera()
                     HomeAction.TypeIngredientsClicked -> onNavigateToIngredients()
                     is HomeAction.RecipeClicked -> onRecipeClick(action.recipe)
-                    HomeAction.ViewAllFavoritesClicked -> Unit
+                    HomeAction.ViewAllFavoritesClicked -> onViewAllFavoritesClick()
                 }
                 viewModel.onAction(action)
             },

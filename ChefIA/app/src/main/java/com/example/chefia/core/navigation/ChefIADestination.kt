@@ -38,4 +38,7 @@ sealed interface ChefIADestination {
     data class RecipeExecution(
         val recipe: Recipe,
     ) : ChefIADestination
+
+    @Serializable
+    data object Favorites : ChefIADestination
 }

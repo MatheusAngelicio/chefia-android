@@ -12,6 +12,7 @@ import com.example.chefia.core.navigation.ChefIADestination
 import com.example.chefia.core.navigation.RecipeNavType
 import com.example.chefia.domain.model.Recipe
 import com.example.chefia.feature.camera.CameraScreen
+import com.example.chefia.feature.favorites.FavoritesScreen
 import com.example.chefia.feature.home.HomeScreen
 import com.example.chefia.feature.ingredients.IngredientsScreen
 import com.example.chefia.feature.ingredientsConfirmation.IngredientsConfirmationScreen
@@ -48,6 +49,27 @@ fun ChefIAApp() {
                     },
                     onNavigateToCamera = {
                         navController.navigate(ChefIADestination.Camera)
+                    },
+                    onRecipeClick = { recipe ->
+                        navController.navigate(ChefIADestination.RecipeDetails(recipe))
+                    },
+                    onViewAllFavoritesClick = {
+                        navController.navigate(ChefIADestination.Favorites)
+                    }
+                )
+            }
+
+            composable<ChefIADestination.Favorites> {
+                FavoritesScreen(
+                    onBackClick = {
+                        navController.navigateUp()
+                    },
+                    onExploreClick = {
+                        navController.navigate(ChefIADestination.Home) {
+                            popUpTo(ChefIADestination.Home) {
+                                inclusive = true
+                            }
+                        }
                     },
                     onRecipeClick = { recipe ->
                         navController.navigate(ChefIADestination.RecipeDetails(recipe))

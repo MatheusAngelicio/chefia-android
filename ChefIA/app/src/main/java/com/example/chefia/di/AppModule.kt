@@ -2,6 +2,7 @@ package com.example.chefia.di
 
 import com.example.chefia.core.common.extensions.deleteTempPhoto
 import com.example.chefia.feature.camera.CameraViewModel
+import com.example.chefia.feature.favorites.FavoritesViewModel
 import com.example.chefia.feature.home.HomeViewModel
 import com.example.chefia.feature.ingredients.IngredientsViewModel
 import com.example.chefia.feature.ingredientsConfirmation.IngredientsConfirmationViewModel
@@ -15,6 +16,7 @@ val appModule = module {
     viewModelOf(::IngredientsViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::CameraViewModel)
+    viewModelOf(::FavoritesViewModel)
 
     viewModel { params ->
         IngredientsConfirmationViewModel(

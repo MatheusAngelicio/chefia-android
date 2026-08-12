@@ -23,7 +23,6 @@ import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,14 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.SubcomposeAsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import com.example.chefia.core.designsystem.components.ChefIAAiBadge
+import com.example.chefia.core.designsystem.components.ChefIARecipeImage
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.components.ChefIAProgressIndicator
 import com.example.chefia.core.designsystem.theme.ChefIATheme
@@ -71,46 +65,13 @@ fun RecipeResultCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
-                .background(visualStyle.backgroundColor),
+                .height(150.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (recipe.imageUrl == null) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    strokeWidth = 2.dp,
-                    color = visualStyle.contentColor
-                )
-            } else {
-                SubcomposeAsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(recipe.imageUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                    loading = {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(24.dp),
-                                strokeWidth = 2.dp,
-                                color = visualStyle.contentColor
-                            )
-                        }
-                    }
-                )
-            }
-
-            ChefIAAiBadge(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(spacing.md)
-                    .size(28.dp),
-                iconModifier = Modifier.size(16.dp),
+            ChefIARecipeImage(
+                recipe = recipe,
+                modifier = Modifier.fillMaxSize(),
+                shape = androidx.compose.ui.graphics.RectangleShape,
             )
 
             Surface(
