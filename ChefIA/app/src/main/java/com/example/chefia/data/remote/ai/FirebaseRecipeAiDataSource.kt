@@ -120,6 +120,7 @@ class FirebaseRecipeAiDataSource(
             - O campo caloriesPerServingKcal deve conter somente um número inteiro.
             - Considere o tamanho das porções e as quantidades informadas ao estimar as calorias.
             - Use instruções simples, claras e seguras.
+            - O número de passos de preparo (preparationSteps) deve ser variado e coerente com a complexidade de cada receita. Evite fixar sempre a mesma quantidade de passos para todas as receitas.
             - Não apresente as calorias como uma informação nutricional exata.
             - Não inclua explicações fora da estrutura solicitada.
         """.trimIndent()
