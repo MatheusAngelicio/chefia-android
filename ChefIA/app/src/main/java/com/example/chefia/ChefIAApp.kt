@@ -34,8 +34,14 @@ fun ChefIAApp() {
         ) {
             composable<ChefIADestination.Splash> {
                 SplashScreen(
-                    onLoadingComplete = {
-                        navController.navigate(ChefIADestination.Login) {
+                    onLoadingComplete = { isAuthenticated ->
+                        val destination = if (isAuthenticated) {
+                            ChefIADestination.Home
+                        } else {
+                            ChefIADestination.Login
+                        }
+
+                        navController.navigate(destination) {
                             popUpTo(ChefIADestination.Splash) {
                                 inclusive = true
                             }
@@ -47,7 +53,11 @@ fun ChefIAApp() {
             composable<ChefIADestination.Login> {
                 LoginScreen(
                     onLoginSuccess = {
-                        // Navigation to Home disabled as requested
+                        navController.navigate(ChefIADestination.Home) {
+                            popUpTo(ChefIADestination.Login) {
+                                inclusive = true
+                            }
+                        }
                     },
                     onNavigateToRegister = {
                         navController.navigate(ChefIADestination.Register)
@@ -58,7 +68,11 @@ fun ChefIAApp() {
             composable<ChefIADestination.Register> {
                 RegisterScreen(
                     onRegisterSuccess = {
-                        navController.navigateUp()
+                        navController.navigate(ChefIADestination.Home) {
+                            popUpTo(ChefIADestination.Login) {
+                                inclusive = true
+                            }
+                        }
                     },
                     onBackToLogin = {
                         navController.navigateUp()

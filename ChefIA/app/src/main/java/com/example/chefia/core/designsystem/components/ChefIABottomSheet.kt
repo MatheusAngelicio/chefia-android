@@ -1,5 +1,6 @@
 package com.example.chefia.core.designsystem.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,10 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -78,47 +82,86 @@ fun ChefIABottomSheet(
             }
         },
         content = {
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = spacing.xl)
+                    .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
             ) {
-                Row(
+
+                ChefIABottomSheetDecoration()
+
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = spacing.md),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(bottom = spacing.xl)
                 ) {
-                    if (title != null) {
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier
-                                .padding(start = spacing.sm)
-                                .weight(1f)
-                        )
-                    } else {
-                        Box(modifier = Modifier.weight(1f))
-                    }
-
-                    IconButton(
-                        onClick = onDismissRequest,
-                        modifier = Modifier.size(48.dp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = spacing.md),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = "Fechar",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        if (title != null) {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier
+                                    .padding(start = spacing.sm)
+                                    .weight(1f)
+                            )
+                        } else {
+                            Box(modifier = Modifier.weight(1f))
+                        }
+
+                        IconButton(
+                            onClick = onDismissRequest,
+                            modifier = Modifier.size(48.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = "Fechar",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
+                    content()
                 }
-                content()
             }
         }
     )
+}
+
+@Composable
+private fun ChefIABottomSheetDecoration() {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp),
+    ) {
+        val wavePath = Path().apply {
+            moveTo(0f, size.height)
+            cubicTo(
+                x1 = size.width * 0.2f,
+                y1 = size.height * 0.8f,
+                x2 = size.width * 0.5f,
+                y2 = size.height * 1.2f,
+                x3 = size.width,
+                y3 = size.height * 0.7f
+            )
+            lineTo(size.width, 0f)
+            lineTo(0f, 0f)
+            close()
+        }
+
+        drawPath(
+            path = wavePath,
+            color = ChefIAColors.Wave.copy(alpha = 0.4f),
+            style = Fill,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -128,7 +171,7 @@ private fun ChefIABottomSheetPreview() {
     ChefIATheme {
         ChefIABottomSheet(
             onDismissRequest = {},
-            title = "Adicionar Ingrediente"
+            title = "Adicionar Ingrediente",
         ) {
             Column(
                 modifier = Modifier

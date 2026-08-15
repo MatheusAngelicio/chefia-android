@@ -2,13 +2,16 @@ package com.example.chefia.feature.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.example.chefia.core.common.util.AuthErrorMapper
+import com.example.chefia.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
@@ -28,21 +31,41 @@ class LoginViewModel : ViewModel() {
             LoginAction.TogglePasswordVisibility -> {
                 _uiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             }
+            LoginAction.DismissError -> {
+                _uiState.update { it.copy(showErrorBottomSheet = false) }
+            }
         }
     }
 
     private fun login() {
+        val state = _uiState.value
+
+        if (state.email.isBlank() || state.password.isBlank()) {
+            _uiState.update { it.copy(errorMessage = "Preencha todos os campos") }
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             
-            // Simulating API call
-            delay(1500)
-
-            _uiState.update { 
-                it.copy(
-                    isLoading = false,
-                    isLoginSuccessful = true
-                )
+            authRepository.signIn(
+                email = state.email,
+                password = state.password
+            ).onSuccess {
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false,
+                        isLoginSuccessful = true 
+                    )
+                }
+            }.onFailure { error ->
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false, 
+                        errorMessage = AuthErrorMapper.map(error),
+                        showErrorBottomSheet = true
+                    )
+                }
             }
         }
     }

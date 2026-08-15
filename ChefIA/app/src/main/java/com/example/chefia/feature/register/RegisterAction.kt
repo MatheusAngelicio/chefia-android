@@ -9,4 +9,5 @@ sealed interface RegisterAction {
     data object TogglePasswordVisibility : RegisterAction
     data object ToggleConfirmPasswordVisibility : RegisterAction
     data object BackToLoginClicked : RegisterAction
+    data object DismissError : RegisterAction
 }

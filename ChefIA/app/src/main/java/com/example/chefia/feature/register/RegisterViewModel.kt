@@ -2,13 +2,16 @@ package com.example.chefia.feature.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.example.chefia.core.common.util.AuthErrorMapper
+import com.example.chefia.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState = _uiState.asStateFlow()
@@ -35,21 +38,57 @@ class RegisterViewModel : ViewModel() {
                 _uiState.update { it.copy(isConfirmPasswordVisible = !it.isConfirmPasswordVisible) }
             }
             RegisterAction.BackToLoginClicked -> { /* Handled in Screen */ }
+            RegisterAction.DismissError -> {
+                _uiState.update { it.copy(showErrorBottomSheet = false) }
+            }
         }
     }
 
     private fun register() {
+        val state = _uiState.value
+        
+        if (state.password != state.confirmPassword) {
+            _uiState.update { 
+                it.copy(
+                    errorMessage = "As senhas não coincidem",
+                    showErrorBottomSheet = true
+                ) 
+            }
+            return
+        }
+
+        if (state.name.isBlank() || state.email.isBlank() || state.password.isBlank()) {
+            _uiState.update { 
+                it.copy(
+                    errorMessage = "Preencha todos os campos",
+                    showErrorBottomSheet = true
+                ) 
+            }
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             
-            // Simulating API call
-            delay(1500)
-            
-            _uiState.update { 
-                it.copy(
-                    isLoading = false,
-                    isRegisterSuccessful = true 
-                )
+            authRepository.signUp(
+                name = state.name,
+                email = state.email,
+                password = state.password
+            ).onSuccess {
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false,
+                        isRegisterSuccessful = true 
+                    )
+                }
+            }.onFailure { error ->
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false, 
+                        errorMessage = AuthErrorMapper.map(error),
+                        showErrorBottomSheet = true
+                    )
+                }
             }
         }
     }

@@ -8,4 +8,5 @@ sealed interface LoginAction {
     data object ForgotPasswordClicked : LoginAction
     data object RegisterClicked : LoginAction
     data object TogglePasswordVisibility : LoginAction
+    data object DismissError : LoginAction
 }

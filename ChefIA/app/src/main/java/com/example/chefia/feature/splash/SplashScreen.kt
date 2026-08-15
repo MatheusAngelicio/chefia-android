@@ -29,14 +29,14 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashScreen(
-    onLoadingComplete: () -> Unit,
+    onLoadingComplete: (isAuthenticated: Boolean) -> Unit,
     viewModel: SplashViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.isLoadingComplete) {
         if (state.isLoadingComplete) {
-            onLoadingComplete()
+            onLoadingComplete(state.isAuthenticated)
         }
     }
 
