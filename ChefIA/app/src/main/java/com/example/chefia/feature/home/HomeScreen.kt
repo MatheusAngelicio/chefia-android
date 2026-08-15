@@ -15,12 +15,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CameraAlt
+import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +40,7 @@ import com.example.chefia.feature.home.components.HomeActionCard
 import com.example.chefia.feature.home.components.HomeActionCardOrientation
 import com.example.chefia.feature.home.components.HomeFavoriteCard
 import com.example.chefia.feature.home.components.HomeFavoritesEmptyState
+import com.example.chefia.feature.home.components.HomeLogoutBottomSheet
 import com.example.chefia.core.designsystem.components.ChefIATopBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -45,13 +50,30 @@ fun HomeScreen(
     onNavigateToCamera: () -> Unit,
     onRecipeClick: (Recipe) -> Unit,
     onViewAllFavoritesClick: () -> Unit,
+    onLogout: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(state.isLoggedOut) {
+        if (state.isLoggedOut) {
+            onLogout()
+        }
+    }
+
     Scaffold(
         topBar = {
-            ChefIATopBar()
+            ChefIATopBar(
+                actions = {
+                    IconButton(onClick = { viewModel.onAction(HomeAction.LogoutRequest) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.Logout,
+                            contentDescription = "Sair",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            )
         },
     ) { innerPadding ->
 
@@ -64,10 +86,20 @@ fun HomeScreen(
                     HomeAction.TypeIngredientsClicked -> onNavigateToIngredients()
                     is HomeAction.RecipeClicked -> onRecipeClick(action.recipe)
                     HomeAction.ViewAllFavoritesClicked -> onViewAllFavoritesClick()
+                    HomeAction.LogoutRequest -> {} // Handled in VM
+                    HomeAction.LogoutConfirm -> {} // Handled in VM
+                    HomeAction.LogoutDismiss -> {} // Handled in VM
                 }
                 viewModel.onAction(action)
             },
         )
+
+        if (state.showLogoutConfirmation) {
+            HomeLogoutBottomSheet(
+                onConfirmLogout = { viewModel.onAction(HomeAction.LogoutConfirm) },
+                onDismiss = { viewModel.onAction(HomeAction.LogoutDismiss) }
+            )
+        }
     }
 }
 

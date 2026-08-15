@@ -2,6 +2,7 @@ package com.example.chefia.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chefia.domain.repository.AuthRepository
 import com.example.chefia.domain.usecase.favorites.ObserveFavoriteRecipesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,9 +10,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val observeFavoriteRecipesUseCase: ObserveFavoriteRecipesUseCase,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -34,6 +37,25 @@ class HomeViewModel(
             HomeAction.TypeIngredientsClicked -> {}
             is HomeAction.RecipeClicked -> {}
             HomeAction.ViewAllFavoritesClicked -> {}
+            HomeAction.LogoutRequest -> {
+                _uiState.update { it.copy(showLogoutConfirmation = true) }
+            }
+            HomeAction.LogoutDismiss -> {
+                _uiState.update { it.copy(showLogoutConfirmation = false) }
+            }
+            HomeAction.LogoutConfirm -> logout()
+        }
+    }
+
+    private fun logout() {
+        viewModelScope.launch {
+            authRepository.signOut()
+            _uiState.update { 
+                it.copy(
+                    isLoggedOut = true,
+                    showLogoutConfirmation = false
+                ) 
+            }
         }
     }
 }

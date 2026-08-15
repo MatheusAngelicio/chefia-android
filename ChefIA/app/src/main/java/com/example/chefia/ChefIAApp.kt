@@ -93,6 +93,13 @@ fun ChefIAApp() {
                     },
                     onViewAllFavoritesClick = {
                         navController.navigate(ChefIADestination.Favorites)
+                    },
+                    onLogout = {
+                        navController.navigate(ChefIADestination.Login) {
+                            popUpTo(ChefIADestination.Home) {
+                                inclusive = true
+                            }
+                        }
                     }
                 )
             }

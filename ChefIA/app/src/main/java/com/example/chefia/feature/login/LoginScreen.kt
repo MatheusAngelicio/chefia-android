@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chefia.R
 import com.example.chefia.core.designsystem.components.AuthTopDecoration
-import com.example.chefia.core.designsystem.components.ChefIABottomSheet
+import com.example.chefia.core.designsystem.components.ChefIAAlertBottomSheet
 import com.example.chefia.core.designsystem.components.ChefIAButton
 import com.example.chefia.core.designsystem.components.ChefIATextField
 import com.example.chefia.core.designsystem.theme.ChefIAColors
@@ -96,52 +96,10 @@ fun LoginScreen(
         )
 
         if (state.showErrorBottomSheet && state.errorMessage != null) {
-            ChefIAAuthErrorBottomSheet(
-                message = state.errorMessage!!,
+            ChefIAAlertBottomSheet(
+                title = "Atenção",
+                description = state.errorMessage!!,
                 onDismiss = { viewModel.onAction(LoginAction.DismissError) }
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ChefIAAuthErrorBottomSheet(
-    message: String,
-    onDismiss: () -> Unit,
-) {
-    val spacing = MaterialTheme.spacing
-
-    ChefIABottomSheet(
-        onDismissRequest = onDismiss,
-        title = "Atenção",
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = spacing.xl, vertical = spacing.lg),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(spacing.md)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.WarningAmber,
-                contentDescription = null,
-                modifier = Modifier.size(64.dp),
-                tint = MaterialTheme.colorScheme.error
-            )
-
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(spacing.md))
-
-            ChefIAButton(
-                text = "Entendi",
-                onClick = onDismiss
             )
         }
     }

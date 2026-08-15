@@ -28,6 +28,8 @@ fun AddIngredientBottomSheetContent(
             .padding(bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
             text = "Digite o nome do ingrediente que você deseja adicionar.",
             style = MaterialTheme.typography.bodyMedium,
