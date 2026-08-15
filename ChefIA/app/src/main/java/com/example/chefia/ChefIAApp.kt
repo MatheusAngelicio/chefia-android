@@ -19,6 +19,8 @@ import com.example.chefia.feature.ingredientsConfirmation.IngredientsConfirmatio
 import com.example.chefia.feature.recipeGeneration.RecipeGenerationScreen
 import com.example.chefia.feature.recipeDetails.RecipeDetailsScreen
 import com.example.chefia.feature.recipeExecution.RecipeExecutionScreen
+import com.example.chefia.feature.login.LoginScreen
+import com.example.chefia.feature.register.RegisterScreen
 import com.example.chefia.feature.splash.SplashScreen
 
 @Composable
@@ -33,12 +35,34 @@ fun ChefIAApp() {
             composable<ChefIADestination.Splash> {
                 SplashScreen(
                     onLoadingComplete = {
-                        navController.navigate(ChefIADestination.Home) {
+                        navController.navigate(ChefIADestination.Login) {
                             popUpTo(ChefIADestination.Splash) {
                                 inclusive = true
                             }
                         }
                     },
+                )
+            }
+
+            composable<ChefIADestination.Login> {
+                LoginScreen(
+                    onLoginSuccess = {
+                        // Navigation to Home disabled as requested
+                    },
+                    onNavigateToRegister = {
+                        navController.navigate(ChefIADestination.Register)
+                    }
+                )
+            }
+
+            composable<ChefIADestination.Register> {
+                RegisterScreen(
+                    onRegisterSuccess = {
+                        navController.navigateUp()
+                    },
+                    onBackToLogin = {
+                        navController.navigateUp()
+                    }
                 )
             }
 

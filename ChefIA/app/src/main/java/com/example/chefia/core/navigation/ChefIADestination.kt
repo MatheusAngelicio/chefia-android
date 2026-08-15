@@ -9,6 +9,12 @@ sealed interface ChefIADestination {
     data object Splash : ChefIADestination
 
     @Serializable
+    data object Login : ChefIADestination
+
+    @Serializable
+    data object Register : ChefIADestination
+
+    @Serializable
     data object Home : ChefIADestination
 
     @Serializable
