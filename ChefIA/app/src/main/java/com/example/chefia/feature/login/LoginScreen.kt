@@ -27,6 +27,7 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.WarningAmber
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -253,10 +255,11 @@ private fun LoginContent(
                         Spacer(modifier = Modifier.height(spacing.sm))
 
                     ChefIAButton(
-                            text = "Entrar",
-                            onClick = { onAction(LoginAction.LoginClicked) },
-                            enabled = !state.isLoading
-                        )
+                        text = "Entrar",
+                        onClick = { onAction(LoginAction.LoginClicked) },
+                        enabled = !state.isLoading,
+                        isLoading = state.isLoading
+                    )
                     }
                 }
 
@@ -324,6 +327,21 @@ private fun LoginContent(
                     modifier = Modifier
                         .padding(vertical = spacing.xl)
                         .clickable { onAction(LoginAction.RegisterClicked) }
+                )
+            }
+        }
+
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.1f))
+                    .clickable(enabled = false) {},
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeCap = StrokeCap.Round
                 )
             }
         }
