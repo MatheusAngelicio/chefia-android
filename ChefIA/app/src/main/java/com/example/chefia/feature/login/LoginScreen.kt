@@ -26,7 +26,6 @@ import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,7 +67,10 @@ import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIADimensions
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
+import com.example.chefia.feature.login.util.GoogleAuthUiClient
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,8 +78,10 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit,
     viewModel: LoginViewModel = koinViewModel(),
+    googleAuthUiClient: GoogleAuthUiClient = koinInject(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(state.isLoginSuccessful) {
         if (state.isLoginSuccessful) {
@@ -88,10 +93,24 @@ fun LoginScreen(
         LoginContent(
             state = state,
             onAction = { action ->
-                if (action is LoginAction.RegisterClicked) {
-                    onNavigateToRegister()
-                } else {
-                    viewModel.onAction(action)
+                when (action) {
+                    is LoginAction.RegisterClicked -> onNavigateToRegister()
+                    LoginAction.GoogleLoginClicked -> {
+                        viewModel.onAction(action)
+                        coroutineScope.launch {
+                            try {
+                                val idToken = googleAuthUiClient.signIn()
+                                if (idToken != null) {
+                                    viewModel.onAction(LoginAction.GoogleLoginSuccess(idToken))
+                                } else {
+                                    viewModel.onAction(LoginAction.GoogleLoginError("Falha ao obter token do Google"))
+                                }
+                            } catch (e: Exception) {
+                                viewModel.onAction(LoginAction.GoogleLoginError(e.localizedMessage ?: "Erro ao autenticar com Google"))
+                            }
+                        }
+                    }
+                    else -> viewModel.onAction(action)
                 }
             },
             modifier = Modifier.padding(innerPadding)
@@ -286,6 +305,7 @@ private fun LoginContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
+                    enabled = !state.isLoading,
                     shape = RoundedCornerShape(26.dp), // Pill shaped
                     border = androidx.compose.foundation.BorderStroke(1.dp, ChefIAColors.Border)
                 ) {

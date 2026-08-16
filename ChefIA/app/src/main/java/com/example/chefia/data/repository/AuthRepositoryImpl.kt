@@ -3,6 +3,7 @@ package com.example.chefia.data.repository
 import com.example.chefia.domain.model.User
 import com.example.chefia.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
@@ -14,6 +15,24 @@ class AuthRepositoryImpl(
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             val firebaseUser = result.user ?: throw Exception("Falha ao fazer login")
+            Result.success(
+                User(
+                    uid = firebaseUser.uid,
+                    name = firebaseUser.displayName,
+                    email = firebaseUser.email
+                )
+            )
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun signInWithGoogle(idToken: String): Result<User> {
+        return try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            val result = firebaseAuth.signInWithCredential(credential).await()
+            val firebaseUser = result.user ?: throw Exception("Falha ao autenticar com Google")
+            
             Result.success(
                 User(
                     uid = firebaseUser.uid,

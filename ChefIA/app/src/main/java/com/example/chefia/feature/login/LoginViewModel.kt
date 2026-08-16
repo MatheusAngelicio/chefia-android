@@ -25,7 +25,19 @@ class LoginViewModel(
                 _uiState.update { it.copy(password = action.password) }
             }
             LoginAction.LoginClicked -> login()
-            LoginAction.GoogleLoginClicked -> { /* Handle Google Login */ }
+            LoginAction.GoogleLoginClicked -> {
+                _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            }
+            is LoginAction.GoogleLoginSuccess -> loginWithGoogle(action.idToken)
+            is LoginAction.GoogleLoginError -> {
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false, 
+                        errorMessage = action.error,
+                        showErrorBottomSheet = true
+                    ) 
+                }
+            }
             LoginAction.ForgotPasswordClicked -> { /* Handle Forgot Password */ }
             LoginAction.RegisterClicked -> { /* Handle Register */ }
             LoginAction.TogglePasswordVisibility -> {
@@ -67,6 +79,29 @@ class LoginViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun loginWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            authRepository.signInWithGoogle(idToken)
+                .onSuccess {
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false,
+                            isLoginSuccessful = true 
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false, 
+                            errorMessage = AuthErrorMapper.map(error),
+                            showErrorBottomSheet = true
+                        )
+                    }
+                }
         }
     }
 }
