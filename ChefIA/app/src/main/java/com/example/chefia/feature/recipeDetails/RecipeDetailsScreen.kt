@@ -1,6 +1,5 @@
 package com.example.chefia.feature.recipeDetails
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,14 +39,18 @@ import com.example.chefia.feature.recipeDetails.components.RecipeDetailsSummary
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-private fun RecipeDetailsScreenContent(
+fun RecipeDetailsScreen(
     recipe: Recipe,
-    isFavorite: Boolean,
     onBackClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    onStartRecipeClick: () -> Unit,
+    onStartRecipeClick: (Recipe) -> Unit,
+    viewModel: RecipeDetailsViewModel = koinViewModel(),
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = MaterialTheme.spacing
+
+    LaunchedEffect(recipe.id) {
+        viewModel.observeFavoriteStatus(recipe.id)
+    }
 
     Scaffold(
         topBar = {
@@ -57,20 +58,20 @@ private fun RecipeDetailsScreenContent(
                 onBackClick = onBackClick,
                 actions = {
                     IconButton(
-                        onClick = onFavoriteClick,
+                        onClick = { viewModel.toggleFavorite(recipe) },
                     ) {
                         Icon(
-                            imageVector = if (isFavorite) {
+                            imageVector = if (state.isFavorite) {
                                 Icons.Rounded.Favorite
                             } else {
                                 Icons.Rounded.FavoriteBorder
                             },
-                            contentDescription = if (isFavorite) {
+                            contentDescription = if (state.isFavorite) {
                                 "Remover dos favoritos"
                             } else {
                                 "Adicionar aos favoritos"
                             },
-                            tint = if (isFavorite) {
+                            tint = if (state.isFavorite) {
                                 MaterialTheme.colorScheme.primary
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
@@ -91,7 +92,7 @@ private fun RecipeDetailsScreenContent(
                 ) {
                     ChefIAButton(
                         text = "Iniciar Receita",
-                        onClick = onStartRecipeClick,
+                        onClick = { onStartRecipeClick(recipe) },
                         modifier = Modifier
                             .padding(spacing.lg)
                             .fillMaxWidth(),
@@ -105,28 +106,6 @@ private fun RecipeDetailsScreenContent(
             modifier = Modifier.padding(innerPadding),
         )
     }
-}
-
-@Composable
-fun RecipeDetailsScreen(
-    recipe: Recipe,
-    onBackClick: () -> Unit,
-    onStartRecipeClick: (Recipe) -> Unit,
-    viewModel: RecipeDetailsViewModel = koinViewModel(),
-) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(recipe.id) {
-        viewModel.observeFavoriteStatus(recipe.id)
-    }
-
-    RecipeDetailsScreenContent(
-        recipe = recipe,
-        isFavorite = state.isFavorite,
-        onBackClick = onBackClick,
-        onFavoriteClick = { viewModel.toggleFavorite(recipe) },
-        onStartRecipeClick = { onStartRecipeClick(recipe) },
-    )
 }
 
 @Composable
@@ -182,40 +161,6 @@ private fun RecipeDetailsContent(
     showSystemUi = true,
 )
 @Composable
-private fun RecipeDetailsScreenPreview() {
-    ChefIATheme {
-        RecipeDetailsScreenContent(
-            recipe = Recipe(
-                id = "1",
-                name = "Omelete de Queijo",
-                description = "Um omelete rápido e fácil",
-                preparationTimeMinutes = 10,
-                servings = 1,
-                caloriesPerServingKcal = 200,
-                difficulty = RecipeDifficulty.EASY,
-                ingredients = listOf(
-                    RecipeIngredient("2 filés de Salmão Fresco", "400g", true),
-                ),
-                preparationSteps = listOf(
-                    RecipeStep(
-                        "PREPARAÇÃO",
-                        "Lave bem o brócolis e corte em floretes pequenos. Tempere o salmão levemente com sal e pimenta-do-reino (o molho já é salgado)."
-                    ),
-                )
-            ),
-            isFavorite = true,
-            onBackClick = {},
-            onFavoriteClick = {},
-            onStartRecipeClick = {},
-        )
-    }
-}
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-)
-@Composable
 private fun RecipeDetailsContentPreview() {
     ChefIATheme {
         RecipeDetailsContent(
@@ -239,5 +184,4 @@ private fun RecipeDetailsContentPreview() {
             )
         )
     }
-
 }
