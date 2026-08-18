@@ -13,7 +13,7 @@ object AuthErrorMapper {
             is FirebaseAuthWeakPasswordException -> "A senha fornecida é muito fraca. Use pelo menos 6 caracteres com letras e números."
             is FirebaseAuthUserCollisionException -> "Este e-mail já está sendo usado por outra conta."
             is FirebaseAuthInvalidUserException -> "Usuário não encontrado. Verifique se o e-mail está correto."
-            is FirebaseAuthInvalidCredentialsException -> "Dados de acesso incorretos. Por favor, verifique seu e-mail e senha."
+            is FirebaseAuthInvalidCredentialsException -> "Informações de acesso inválidas. Por favor, verifique os dados informados."
             is FirebaseNetworkException -> "Erro de conexão. Verifique se você está conectado à internet."
             is FirebaseException -> {
                 if (throwable.message?.contains("App attestation failed", ignoreCase = true) == true) {

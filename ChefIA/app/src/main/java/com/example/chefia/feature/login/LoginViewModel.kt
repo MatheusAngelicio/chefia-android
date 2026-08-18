@@ -165,6 +165,7 @@ class LoginViewModel(
                             isSendingResetEmail = false, 
                             errorMessage = AuthErrorMapper.map(error),
                             showErrorBottomSheet = true,
+                            showForgotPasswordBottomSheet = false,
                             alertType = ChefIAAlertBottomSheetType.ERROR
                         )
                     }

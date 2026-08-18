@@ -124,9 +124,7 @@ fun LoginScreen(
                 onDismiss = { viewModel.onAction(LoginAction.DismissError) },
                 type = state.alertType
             )
-        }
-
-        if (state.showForgotPasswordBottomSheet) {
+        } else if (state.showForgotPasswordBottomSheet) {
             ForgotPasswordBottomSheet(
                 email = state.forgotPasswordEmail,
                 onEmailChanged = { viewModel.onAction(LoginAction.ForgotPasswordEmailChanged(it)) },
