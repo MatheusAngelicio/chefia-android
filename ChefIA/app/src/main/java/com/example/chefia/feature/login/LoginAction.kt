@@ -11,4 +11,7 @@ sealed interface LoginAction {
     data object RegisterClicked : LoginAction
     data object TogglePasswordVisibility : LoginAction
     data object DismissError : LoginAction
+    data class ForgotPasswordEmailChanged(val email: String) : LoginAction
+    data object ForgotPasswordSubmit : LoginAction
+    data object ForgotPasswordDismiss : LoginAction
 }

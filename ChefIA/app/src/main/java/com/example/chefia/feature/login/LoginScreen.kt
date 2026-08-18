@@ -67,6 +67,7 @@ import com.example.chefia.core.designsystem.theme.ChefIAColors
 import com.example.chefia.core.designsystem.theme.ChefIADimensions
 import com.example.chefia.core.designsystem.theme.ChefIATheme
 import com.example.chefia.core.designsystem.theme.spacing
+import com.example.chefia.feature.login.components.ForgotPasswordBottomSheet
 import com.example.chefia.feature.login.util.GoogleAuthUiClient
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -120,7 +121,18 @@ fun LoginScreen(
             ChefIAAlertBottomSheet(
                 title = "Atenção",
                 description = state.errorMessage!!,
-                onDismiss = { viewModel.onAction(LoginAction.DismissError) }
+                onDismiss = { viewModel.onAction(LoginAction.DismissError) },
+                type = state.alertType
+            )
+        }
+
+        if (state.showForgotPasswordBottomSheet) {
+            ForgotPasswordBottomSheet(
+                email = state.forgotPasswordEmail,
+                onEmailChanged = { viewModel.onAction(LoginAction.ForgotPasswordEmailChanged(it)) },
+                onSubmit = { viewModel.onAction(LoginAction.ForgotPasswordSubmit) },
+                onDismiss = { viewModel.onAction(LoginAction.ForgotPasswordDismiss) },
+                isLoading = state.isSendingResetEmail
             )
         }
     }

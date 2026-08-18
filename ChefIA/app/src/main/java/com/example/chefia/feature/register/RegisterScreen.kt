@@ -27,7 +27,6 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -100,7 +99,8 @@ fun RegisterScreen(
             ChefIAAlertBottomSheet(
                 title = "Atenção",
                 description = state.errorMessage!!,
-                onDismiss = { viewModel.onAction(RegisterAction.DismissError) }
+                onDismiss = { viewModel.onAction(RegisterAction.DismissError) },
+                type = state.alertType
             )
         }
     }

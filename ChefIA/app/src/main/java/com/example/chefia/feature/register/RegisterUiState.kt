@@ -1,5 +1,7 @@
 package com.example.chefia.feature.register
 
+import com.example.chefia.core.designsystem.components.ChefIAAlertBottomSheetType
+
 data class RegisterUiState(
     val name: String = "",
     val email: String = "",
@@ -11,4 +13,5 @@ data class RegisterUiState(
     val errorMessage: String? = null,
     val showErrorBottomSheet: Boolean = false,
     val isRegisterSuccessful: Boolean = false,
+    val alertType: ChefIAAlertBottomSheetType = ChefIAAlertBottomSheetType.ERROR,
 )

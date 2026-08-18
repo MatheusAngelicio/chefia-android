@@ -3,6 +3,7 @@ package com.example.chefia.feature.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefia.core.common.util.AuthErrorMapper
+import com.example.chefia.core.designsystem.components.ChefIAAlertBottomSheetType
 import com.example.chefia.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,7 +52,8 @@ class RegisterViewModel(
             _uiState.update { 
                 it.copy(
                     errorMessage = "As senhas não coincidem",
-                    showErrorBottomSheet = true
+                    showErrorBottomSheet = true,
+                    alertType = ChefIAAlertBottomSheetType.WARNING
                 ) 
             }
             return
@@ -61,7 +63,8 @@ class RegisterViewModel(
             _uiState.update { 
                 it.copy(
                     errorMessage = "Preencha todos os campos",
-                    showErrorBottomSheet = true
+                    showErrorBottomSheet = true,
+                    alertType = ChefIAAlertBottomSheetType.WARNING
                 ) 
             }
             return
@@ -86,7 +89,8 @@ class RegisterViewModel(
                     it.copy(
                         isLoading = false, 
                         errorMessage = AuthErrorMapper.map(error),
-                        showErrorBottomSheet = true
+                        showErrorBottomSheet = true,
+                        alertType = ChefIAAlertBottomSheetType.ERROR
                     )
                 }
             }
